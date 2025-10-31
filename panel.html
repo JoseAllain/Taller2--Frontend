@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mis Proyectos - BlackQuery</title>
+    <link rel="stylesheet" href="css/panel_css.css" />
+    <link rel="stylesheet" href="css/dark-mode-base.css" />
+    <link rel="stylesheet" href="css/dark-mode-panel.css" />
+    <script defer src="js/panel.js"></script>
+    <script defer src="js/dark-mode.js"></script>
+  </head>
+  <body>
+    <div class="navbar">
+      <span class="navbar-title">BlackQuery</span>
+      <button onclick="logout()" class="btn logout">Cerrar sesión</button>
+      <button onclick="window.location.href='principal.html'" class="btn atras">
+        Atrás
+      </button>
+    </div>
+    <div class="panel-container">
+      <h1>Mis Proyectos Analizados</h1>
+      <ul id="lista-proyectos" class="project-list"></ul>
+    </div>
+  </body>
+</html>

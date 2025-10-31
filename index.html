@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - BlackQuery</title>
+    <link rel="stylesheet" href="css/index.css" />
+    <link rel="stylesheet" href="css/dark-mode-base.css" />
+    <link rel="stylesheet" href="css/dark-mode-login.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="form-wrapper" id="formWrapper">
+        <!-- Formulario de Login -->
+        <form id="form-login" class="form active">
+          <h2>Inicia sesión</h2>
+          <div class="input-field">
+            <input type="email" id="login-correo" required />
+            <label>Ingresa tu correo</label>
+          </div>
+          <div class="input-field">
+            <input type="password" id="login-password" required />
+            <label>Ingresa tu contraseña</label>
+          </div>
+          <button type="submit">Entrar</button>
+          <div class="register">
+            <p>
+              ¿No tienes una cuenta?
+              <a href="#" id="toggle-to-register">Regístrate</a>
+            </p>
+          </div>
+        </form>
+
+        <!-- Formulario de Registro -->
+        <form id="form-registro" class="form">
+          <h2>Registro</h2>
+          <div class="input-field">
+            <input type="text" id="reg-nombre" required />
+            <label>Ingresa tu nombre</label>
+          </div>
+          <div class="input-field">
+            <input type="email" id="reg-correo" required />
+            <label>Ingresa tu correo</label>
+          </div>
+          <div class="input-field">
+            <input type="password" id="reg-password" required />
+            <label>Crea una contraseña</label>
+          </div>
+          <button type="submit">Registrarse</button>
+          <div class="register">
+            <p>
+              ¿Ya tienes una cuenta?
+              <a href="#" id="toggle-to-login">Inicia sesión</a>
+            </p>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      const backendURL = "http://localhost:8000";
+
+      // Alternar formularios
+      document.getElementById("toggle-to-register").onclick = (e) => {
+        e.preventDefault();
+        document.getElementById("form-login").classList.remove("active");
+        document.getElementById("form-registro").classList.add("active");
+      };
+
+      document.getElementById("toggle-to-login").onclick = (e) => {
+        e.preventDefault();
+        document.getElementById("form-registro").classList.remove("active");
+        document.getElementById("form-login").classList.add("active");
+      };
+
+      function validarNombre(nombre) {
+        const regex = /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+$/;
+        return regex.test(nombre.trim());
+      }
+
+      function validarCorreo(correo) {
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return regex.test(correo.trim());
+      }
+
+      function validarContrasena(contrasena) {
+        const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,}$/;
+        return regex.test(contrasena);
+      }
+
+      // ✅ REGISTRO con validación
+      document
+        .getElementById("form-registro")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          const nombre = document.getElementById("reg-nombre").value;
+          const email = document.getElementById("reg-correo").value;
+          const password = document.getElementById("reg-password").value;
+
+          if (!validarNombre(nombre)) {
+            alert("El nombre solo debe contener letras y espacios.");
+            return;
+          }
+
+          if (!validarCorreo(email)) {
+            alert("El correo no tiene un formato válido.");
+            return;
+          }
+
+          if (!validarContrasena(password)) {
+            alert(
+              "La contraseña debe tener al menos 6 caracteres, una mayúscula, una minúscula, un número y un símbolo."
+            );
+            return;
+          }
+
+          try {
+            const res = await fetch(`${backendURL}/auth/register`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email, password }),
+            });
+
+            const data = await res.json();
+            if (res.ok) {
+              alert("Usuario registrado correctamente");
+              document.getElementById("toggle-to-login").click();
+            } else {
+              const mensaje =
+                typeof data.detail === "string"
+                  ? data.detail
+                  : JSON.stringify(data.detail);
+              alert("Error: " + mensaje);
+            }
+          } catch (err) {
+            alert("Error de conexión con el servidor");
+          }
+        });
+
+      // LOGIN
+      document.getElementById("form-login").onsubmit = async (e) => {
+        e.preventDefault();
+        const username = document.getElementById("login-correo").value;
+        const password = document.getElementById("login-password").value;
+
+        try {
+          const res = await fetch(`${backendURL}/auth/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: new URLSearchParams({ username, password }),
+          });
+
+          const data = await res.json();
+          if (res.ok) {
+            localStorage.setItem("token", data.access_token);
+            localStorage.setItem("user_id", data.user_id);
+            alert("Inicio de sesión exitoso");
+            window.location.href = "principal.html";
+          } else {
+            alert(data.detail || "Error al iniciar sesión");
+          }
+        } catch (err) {
+          alert("Error de conexión con el servidor");
+        }
+      };
+    </script>
+    <script src="js/dark-mode.js"></script>
+  </body>
+</html>

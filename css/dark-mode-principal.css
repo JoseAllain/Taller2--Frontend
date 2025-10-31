@@ -1,0 +1,68 @@
+/* Modo Oscuro - Página Principal (principal.html) */
+
+/* Modo oscuro para la sección hero */
+[data-theme="dark"] .hero {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 25%, #0f0f0f 75%, #000000 100%) !important;
+}
+
+[data-theme="dark"] .hero::before {
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat !important;
+  animation: float 25s ease-in-out infinite !important;
+}
+
+/* Modo oscuro para el título principal */
+[data-theme="dark"] .hero h1 {
+  background: linear-gradient(45deg, #ffffff, #f0f0f0) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+}
+
+[data-theme="dark"] .hero .highlight {
+  color: #00e5ff !important;
+  text-shadow: 0 0 20px rgba(0, 229, 255, 0.6) !important;
+}
+
+/* Modo oscuro para el formulario de subida */
+[data-theme="dark"] .upload-form {
+  background: rgba(45, 45, 45, 0.8) !important;
+  border: 1px solid rgba(0, 229, 255, 0.2) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6) !important;
+}
+
+[data-theme="dark"] .upload-form label {
+  color: var(--text-dark) !important;
+}
+
+/* Modo oscuro para la barra de subida de archivos */
+[data-theme="dark"] .file-name-bar {
+  background: rgba(45, 45, 45, 0.9) !important;
+  color: var(--text-dark) !important;
+  border: 2px solid rgba(0, 229, 255, 0.3) !important;
+}
+
+[data-theme="dark"] .upload-bar .file-select-btn {
+  background: linear-gradient(45deg, #333, #555) !important;
+  color: var(--text-dark) !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5) !important;
+}
+
+[data-theme="dark"] .upload-bar .file-select-btn:hover {
+  background: linear-gradient(45deg, #555, #777) !important;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7) !important;
+}
+
+[data-theme="dark"] .upload-bar button {
+  background: linear-gradient(45deg, #00e5ff, #00b0ff) !important;
+  color: white !important;
+  box-shadow: 0 4px 15px rgba(0, 229, 255, 0.4) !important;
+}
+
+[data-theme="dark"] .upload-bar button:hover {
+  box-shadow: 0 8px 25px rgba(0, 229, 255, 0.6) !important;
+}
+
+/* Transiciones para la página principal */
+.hero, .upload-form, .file-name-bar {
+  transition: background-color 0.3s ease, color 0.3s ease !important;
+}

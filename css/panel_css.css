@@ -1,0 +1,130 @@
+
+/* NAVBAR */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background-color: black;
+  z-index: 999;
+}
+
+/* Título centrado horizontal y vertical */
+.navbar-title {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* Botón a la derecha, centrado verticalmente */
+.navbar .btn.logout {
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.navbar .btn.atras {
+  position: relative;
+  top: 50%;
+  left: 20px;
+  transform: translateY(-50%);
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.navbar .btn.atras:hover {
+  background-color: #c0392b;
+}
+
+
+
+.navbar .btn.logout:hover {
+  background-color: #c0392b;
+}
+
+
+
+/* CONTENEDOR PRINCIPAL */
+.panel-container {
+  padding: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+  margin-top: 80px; /* deja espacio para la navbar fija */
+}
+
+/* ELIMINAR VIÑETAS Y ESPACIOS DE LA UL */
+#lista-proyectos {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* TARJETAS DE PROYECTO */
+.project-card {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 18px 24px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* INFO DE PROYECTO */
+.project-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.project-info h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #2c3e50;
+}
+
+.project-info p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* BOTÓN VER REPORTE */
+.btn-ver {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.btn-ver:hover {
+  background-color: #2980b9;
+}
+

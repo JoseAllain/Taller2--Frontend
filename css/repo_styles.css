@@ -1,0 +1,271 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  height: 100%;
+  font-family: 'Arial', sans-serif;
+}
+
+.hero {
+  background: #f2f2f2;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background-color: black;
+  z-index: 999;
+}
+
+/* Título centrado horizontal y vertical */
+.navbar-title {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.navbar .btn.atras {
+  position: relative;
+  top: 50%;
+  left: 20px;
+  transform: translateY(-50%);
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.navbar .btn.logout {
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.navbar .btn.logout:hover {
+  background-color: #c0392b;
+}
+
+
+.container {
+  display: flex;
+  height: calc(100vh - 60px);
+  overflow: visible;
+  margin-top: 60px;
+}
+
+.sidebar {
+  width: 250px;
+  background-color: #fff;
+  padding: 20px;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.menu {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.menu ul {
+  list-style-type: none;
+  padding: 0;
+  margin-bottom: 20px;
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+.menu li {
+  margin-bottom: 10px;
+}
+
+.menu button {
+  width: 100%;
+  padding: 10px;
+  background-color: #007acc;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  margin-bottom: 5px;
+}
+
+.menu button:hover {
+  background-color: #005a9e;
+}
+
+.content {
+  flex: 1;
+  padding: 20px;
+  background-color: #f7f7f7;
+  overflow-y: auto;
+  display: flex;
+  gap: 20px;
+}
+
+/* Visor de código a la izquierda */
+.code-viewer {
+  flex: 1;
+  background-color: #333;
+  color: white;
+  border-radius: 8px;
+  overflow: auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  min-width: 42%;
+  /* Ocultar scrollbars */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+/* Ocultar scrollbar en WebKit (Chrome, Safari, Edge) */
+.code-viewer::-webkit-scrollbar {
+  display: none;
+}
+
+.editor-header {
+  display: flex;
+  background-color: #333;
+  padding: 8px 12px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  gap: 8px;
+}
+
+pre.line-numbers {
+  padding-left: 3.8em;
+  margin: 0;
+  padding: 20px;
+  overflow: auto;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color:#dcdcdc;
+  /* Ocultar scrollbars */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+/* Ocultar scrollbar en WebKit (Chrome, Safari, Edge) */
+pre.line-numbers::-webkit-scrollbar {
+  display: none;
+}
+
+.line-numbers .line-numbers-rows > span:before {
+  color: #888;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.dot.red { background-color: #ff5f56; }
+.dot.yellow { background-color: #ffbd2e; }
+.dot.green { background-color: #27c93f; }
+
+/* Reporte de vulnerabilidades al costado derecho */
+.report-section {
+  flex: 1;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  overflow-y: auto;
+  max-height: 100%;
+}
+
+.report-section h2 {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  color: #111;
+}
+
+#report-container {
+  background-color: white;
+  color: #ffffff;
+  font-family: 'Courier New', monospace;
+  padding: 15px 20px;
+  border-radius: 8px;
+  white-space: pre-wrap;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.vulnerability-report {
+  background-color: #1e1e1e;
+  padding: 15px 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border-left: 5px solid #ff4c4c;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.vulnerability-report .critico {
+  color: #ff4c4c;
+  font-weight: bold;
+}
+
+.vulnerability-report .linea {
+  color: #dcdcdc;
+}
+
+.vulnerability-report .fragmento {
+  color: #9cdcfe;
+}
+
+.vulnerability-report .mensaje {
+  color: #f44747;
+}
+
+#estadisticas {
+  background-color: #f2f2f2;
+  color: #333;
+  padding: 15px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.mapa_calor{
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.grafo{
+  margin-top: 20px;
+}
+

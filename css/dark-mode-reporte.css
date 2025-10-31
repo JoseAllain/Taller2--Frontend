@@ -1,0 +1,97 @@
+/* Modo Oscuro - Página de Reporte (reporte.html) */
+
+/* Modo oscuro para la sección hero del reporte */
+[data-theme="dark"] .hero {
+  background: var(--bg-dark) !important;
+}
+
+/* Modo oscuro para la barra lateral */
+[data-theme="dark"] .sidebar {
+  background-color: #222 !important;
+}
+
+/* Modo oscuro para el contenido principal */
+[data-theme="dark"] .content {
+  background-color: var(--bg-dark) !important;
+}
+
+/* Modo oscuro para el visor de código */
+[data-theme="dark"] .code-viewer {
+  background-color: #1e1e1e !important;
+}
+
+[data-theme="dark"] .editor-header {
+  background-color: #1e1e1e !important;
+}
+
+/* Modo oscuro para el código */
+[data-theme="dark"] pre.line-numbers {
+  background-color: #1e1e1e !important;
+  color: #dcdcdc !important;
+}
+
+/* Modo oscuro para la sección de reportes */
+[data-theme="dark"] .report-section {
+  background-color: var(--card-bg-dark) !important;
+  color: var(--text-dark) !important;
+}
+
+[data-theme="dark"] .report-section h2 {
+  color: var(--text-dark) !important;
+}
+
+/* Modo oscuro para el contenedor de reportes */
+[data-theme="dark"] #report-container {
+  background-color: var(--card-bg-dark) !important;
+  color: var(--text-dark) !important;
+}
+
+/* Modo oscuro para los reportes de vulnerabilidades */
+[data-theme="dark"] .vulnerability-report {
+  background-color: #2d2d2d !important;
+  border-left: 5px solid #ff6b6b !important;
+}
+
+[data-theme="dark"] .vulnerability-report .critico {
+  color: #ff6b6b !important;
+}
+
+[data-theme="dark"] .vulnerability-report .linea {
+  color: #dcdcdc !important;
+}
+
+[data-theme="dark"] .vulnerability-report .fragmento {
+  color: #9cdcfe !important;
+}
+
+[data-theme="dark"] .vulnerability-report .mensaje {
+  color: #f44747 !important;
+}
+
+/* Modo oscuro para los botones del menú */
+[data-theme="dark"] .menu button {
+  background-color: #1a237e !important;
+  color: var(--text-dark) !important;
+}
+
+[data-theme="dark"] .menu button:hover {
+  background-color: #333 !important;
+}
+
+/* Modo oscuro para estadísticas */
+[data-theme="dark"] #estadisticas {
+  background-color: var(--card-bg-dark) !important;
+  color: var(--text-dark) !important;
+  box-shadow: 0 4px 8px var(--shadow-dark) !important;
+}
+
+/* Modo oscuro para iframes */
+[data-theme="dark"] iframe {
+  border: 1px solid var(--border-dark) !important;
+}
+
+/* Transiciones para la página de reporte */
+.hero, .sidebar, .content, .code-viewer, .report-section, 
+.vulnerability-report, .menu button {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease !important;
+}

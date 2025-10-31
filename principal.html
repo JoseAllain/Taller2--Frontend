@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>BlackQuery</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/dark-mode-base.css" />
+    <link rel="stylesheet" href="css/dark-mode-principal.css" />
+    <script src="js/autenticacion.js" defer></script>
+    <script src="js/principal.js" defer></script>
+    <script src="js/dark-mode.js" defer></script>
+  </head>
+  <body>
+    <div class="hero">
+      <div class="navbar">
+        <span class="navbar-title">BlackQuery</span>
+        <button onclick="logout()" class="btn logout">Cerrar sesión</button>
+        <!--
+        <button class="btn panel" onclick="window.location.href='panel.html'">
+          Ver mis proyectos analizados
+        </button>
+        -->
+      </div>
+
+      <h1>
+        Inserta tu código en Java y<br />
+        detecta vulnerabilidades de<br />
+        <span class="highlight">Inyección SQL</span>.
+      </h1>
+
+      <form onsubmit="return false;" class="upload-form">
+        <label for="archivo">Sube tu archivo Zip o Java:</label>
+        <div class="upload-bar">
+          <button type="button" class="file-select-btn">
+            Seleccionar archivo
+          </button>
+          <input
+            type="file"
+            id="archivo"
+            name="archivo"
+            accept=".zip"
+            class="file-input"
+          />
+          <input
+            type="text"
+            id="file-name"
+            class="file-name-bar"
+            readonly
+            placeholder="Ningún archivo seleccionado"
+          />
+          <button type="button" onclick="subirZip()">Subir</button>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

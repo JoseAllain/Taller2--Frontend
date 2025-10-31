@@ -1,0 +1,66 @@
+/* Modo Oscuro - Página de Login (index.html) */
+
+/* Modo oscuro para el contenedor principal */
+[data-theme="dark"] .container {
+  background-color: var(--bg-dark);
+  overflow: hidden;
+}
+
+/* Modo oscuro para los formularios */
+[data-theme="dark"] .form {
+  background-color: rgba(45, 45, 45, 0.9) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  backdrop-filter: blur(8px);
+}
+
+/* Modo oscuro para campos de entrada */
+[data-theme="dark"] .input-field {
+  border-bottom: 2px solid #555 !important;
+}
+
+[data-theme="dark"] .input-field input {
+  color: var(--text-dark) !important;
+}
+
+[data-theme="dark"] .input-field label {
+  color: #ccc !important;
+}
+
+/* Modo oscuro para botones específicos del login */
+[data-theme="dark"] .form button {
+  background: #555 !important;
+  color: var(--text-dark) !important;
+}
+
+[data-theme="dark"] .form button:hover {
+  background: rgba(85, 85, 85, 0.8) !important;
+  border-color: #777 !important;
+}
+
+/* Modo oscuro para texto de registro */
+[data-theme="dark"] .register {
+  color: var(--text-dark) !important;
+}
+
+[data-theme="dark"] .register a {
+  color: #64b5f6 !important;
+}
+
+[data-theme="dark"] .register a:hover {
+  color: #90caf9 !important;
+}
+
+/* Ajustes específicos para inputs con autofill en modo oscuro */
+[data-theme="dark"] input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px #333 inset !important;
+  -webkit-text-fill-color: var(--text-dark) !important;
+}
+
+[data-theme="dark"] input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #333 inset !important;
+}
+
+/* Transiciones para formularios */
+.container, .form, .input-field {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease !important;
+}
