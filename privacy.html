@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Privacidad y Datos - BlackQuery</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/dark-mode-base.css" />
+    <style>
+      /* Variables CSS para temas */
+      :root {
+        --privacy-bg-primary: #ffffff;
+        --privacy-bg-secondary: #f8f9fa;
+        --privacy-text-primary: #212529;
+        --privacy-text-secondary: #6c757d;
+        --privacy-border: #e0e0e0;
+        --privacy-shadow: rgba(0, 0, 0, 0.1);
+        --privacy-card-hover: rgba(0, 123, 255, 0.05);
+        --privacy-accent: #007bff;
+        --privacy-accent-hover: #0056b3;
+        --privacy-danger: #dc3545;
+        --privacy-danger-hover: #c82333;
+        --privacy-success: #28a745;
+        --privacy-warning: #ffc107;
+        --privacy-second-text-titulo: #1d2227ff;
+      }
+
+      [data-theme="dark"] {
+        --privacy-bg-primary: #2d2d2d;
+        --privacy-bg-secondary: #1a1a1a;
+        --privacy-text-primary: #ffffff;
+        --privacy-text-secondary: #b0b0b0;
+        --privacy-border: #444;
+        --privacy-shadow: rgba(0, 0, 0, 0.5);
+        --privacy-card-hover: rgba(100, 181, 246, 0.1);
+        --privacy-accent: #64b5f6;
+        --privacy-accent-hover: #90caf9;
+        --privacy-danger: #ef5350;
+        --privacy-danger-hover: #e53935;
+        --privacy-success: #66bb6a;
+        --privacy-warning: #ffca28;
+        --privacy-second-text-titulo: #ffffff;
+      }
+
+      body {
+        background: #667eea;
+        min-height: 100vh;
+        transition: background 0.3s ease;
+      }
+
+      [data-theme="dark"] body {
+        background: #1a1a2e;
+      }
+
+      .privacy-container {
+        max-width: 1200px;
+        margin: 60px auto;
+        padding: 20px;
+      }
+
+      .page-header {
+        text-align: center;
+        padding: 40px 20px;
+        margin-bottom: 30px;
+      }
+
+      .page-header h1 {
+        font-size: 2.5rem;
+        color: var(--privacy-text-primary);
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px var(--privacy-shadow);
+      }
+
+      .page-header p {
+        font-size: 1.1rem;
+        color: var(--privacy-second-text-titulo);
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .privacy-section {
+        background: var(--privacy-bg-primary);
+        border-radius: 15px;
+        padding: 30px;
+        margin: 20px 0;
+        box-shadow: 0 8px 25px var(--privacy-shadow);
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+      }
+
+      .privacy-section:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 35px var(--privacy-shadow);
+      }
+
+      .privacy-section h2 {
+        color: var(--privacy-text-primary);
+        margin-bottom: 20px;
+        font-size: 1.8rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .privacy-section p {
+        color: var(--privacy-text-secondary);
+        line-height: 1.6;
+      }
+
+      .rights-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 25px;
+        margin: 25px 0;
+      }
+
+      .right-card {
+        background: var(--privacy-bg-secondary);
+        border: 2px solid var(--privacy-border);
+        border-radius: 12px;
+        padding: 25px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .right-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(
+          90deg,
+          var(--privacy-accent),
+          var(--privacy-success)
+        );
+      }
+
+      .right-card:hover {
+        transform: translateY(-5px) scale(1.02);
+        box-shadow: 0 8px 20px var(--privacy-shadow);
+        border-color: var(--privacy-accent);
+        background: var(--privacy-card-hover);
+      }
+
+      .right-card h3 {
+        color: var(--privacy-text-primary);
+        margin-bottom: 15px;
+        font-size: 1.3rem;
+      }
+
+      .right-card p {
+        color: var(--privacy-text-secondary);
+        font-size: 0.95rem;
+      }
+
+      .form-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-bottom: 20px;
+      }
+
+      .btn-privacy {
+        background: var(--privacy-accent);
+        color: white;
+        border: none;
+        padding: 14px 28px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 15px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .btn-privacy:hover {
+        background: var(--privacy-accent-hover);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(0, 123, 255, 0.4);
+      }
+
+      .btn-privacy:active {
+        transform: translateY(0);
+      }
+
+      .btn-danger {
+        background: var(--privacy-danger);
+        box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+      }
+
+      .btn-danger:hover {
+        background: var(--privacy-danger-hover);
+        box-shadow: 0 6px 18px rgba(220, 53, 69, 0.4);
+      }
+
+      .btn-success {
+        background: var(--privacy-success);
+        box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+      }
+
+      .btn-success:hover {
+        background: #218838;
+        box-shadow: 0 6px 18px rgba(40, 167, 69, 0.4);
+      }
+
+      .request-form {
+        background: var(--privacy-bg-secondary);
+        padding: 25px;
+        border-radius: 12px;
+        margin: 20px 0;
+        display: none;
+        border: 2px solid var(--privacy-border);
+        animation: fadeIn 0.3s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .request-form h3 {
+        color: var(--privacy-text-primary);
+        margin-bottom: 20px;
+        font-size: 1.4rem;
+      }
+
+      .form-group {
+        margin: 20px 0;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: var(--privacy-text-primary);
+        font-size: 0.95rem;
+      }
+
+      .form-group input,
+      .form-group textarea {
+        width: 100%;
+        padding: 12px 16px;
+        border: 2px solid var(--privacy-border);
+        border-radius: 8px;
+        font-size: 14px;
+        background: var(--privacy-bg-primary);
+        color: var(--privacy-text-primary);
+        transition: all 0.3s ease;
+        box-sizing: border-box;
+      }
+
+      .form-group input:focus,
+      .form-group textarea:focus {
+        outline: none;
+        border-color: var(--privacy-accent);
+        box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+      }
+
+      [data-theme="dark"] .form-group input:focus,
+      [data-theme="dark"] .form-group textarea:focus {
+        box-shadow: 0 0 0 3px rgba(100, 181, 246, 0.2);
+      }
+
+      .form-group textarea {
+        height: 100px;
+        resize: vertical;
+        font-family: inherit;
+      }
+
+      .form-group input[type="checkbox"] {
+        width: auto;
+        margin-right: 8px;
+      }
+
+      .requests-list {
+        margin-top: 25px;
+      }
+
+      .request-item {
+        background: var(--privacy-bg-secondary);
+        border: 2px solid var(--privacy-border);
+        border-radius: 12px;
+        padding: 20px;
+        margin: 15px 0;
+        transition: all 0.3s ease;
+      }
+
+      .request-item:hover {
+        border-color: var(--privacy-accent);
+        box-shadow: 0 5px 15px var(--privacy-shadow);
+        transform: translateX(5px);
+      }
+
+      .request-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        margin-bottom: 15px;
+      }
+
+      .request-item h4 {
+        color: var(--privacy-text-primary);
+        margin: 0 0 10px 0;
+        font-size: 1.2rem;
+      }
+
+      .request-item p {
+        color: var(--privacy-text-secondary);
+        margin: 8px 0;
+        font-size: 0.9rem;
+      }
+
+      .request-item strong {
+        color: var(--privacy-text-primary);
+      }
+
+      .request-status {
+        display: inline-block;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .status-pending {
+        background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
+        color: #856404;
+      }
+
+      .status-in_progress {
+        background: linear-gradient(135deg, #74b9ff, #0984e3);
+        color: #004085;
+      }
+
+      .status-completed {
+        background: linear-gradient(135deg, #55efc4, #00b894);
+        color: #155724;
+      }
+
+      .status-rejected {
+        background: linear-gradient(135deg, #ff7675, #d63031);
+        color: #721c24;
+      }
+
+      [data-theme="dark"] .status-pending {
+        color: #ffd700;
+      }
+
+      [data-theme="dark"] .status-in_progress {
+        color: #90caf9;
+      }
+
+      [data-theme="dark"] .status-completed {
+        color: #81c784;
+      }
+
+      [data-theme="dark"] .status-rejected {
+        color: #ef9a9a;
+      }
+
+      .warning-box {
+        background: linear-gradient(135deg, #fff9e6, #fff3cd);
+        border: 2px solid var(--privacy-warning);
+        border-radius: 10px;
+        padding: 18px;
+        margin: 15px 0;
+        border-left: 5px solid var(--privacy-warning);
+      }
+
+      [data-theme="dark"] .warning-box {
+        background: linear-gradient(135deg, #332b00, #4a3f00);
+      }
+
+      .warning-box strong {
+        color: #856404;
+        font-size: 1.1rem;
+      }
+
+      [data-theme="dark"] .warning-box strong {
+        color: var(--privacy-warning);
+      }
+
+      .danger-box {
+        background: linear-gradient(135deg, #ffe6e6, #f8d7da);
+        border: 2px solid var(--privacy-danger);
+        border-radius: 10px;
+        padding: 18px;
+        margin: 15px 0;
+        border-left: 5px solid var(--privacy-danger);
+      }
+
+      [data-theme="dark"] .danger-box {
+        background: linear-gradient(135deg, #330000, #4a0000);
+      }
+
+      .danger-box strong {
+        color: #721c24;
+        font-size: 1.1rem;
+      }
+
+      [data-theme="dark"] .danger-box strong {
+        color: var(--privacy-danger);
+      }
+
+      .danger-box ul {
+        margin: 10px 0;
+        padding-left: 25px;
+      }
+
+      .danger-box li {
+        margin: 5px 0;
+        color: var(--privacy-text-secondary);
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 40px;
+        color: var(--privacy-text-secondary);
+      }
+
+      .empty-state svg {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 20px;
+        opacity: 0.5;
+      }
+
+      /* Animaciones */
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.7;
+        }
+      }
+
+      .loading {
+        animation: pulse 1.5s ease-in-out infinite;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .page-header h1 {
+          font-size: 2rem;
+        }
+
+        .privacy-section {
+          padding: 20px;
+        }
+
+        .rights-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .form-buttons {
+          flex-direction: column;
+        }
+
+        .btn-privacy {
+          width: 100%;
+          justify-content: center;
+        }
+
+        .request-header {
+          flex-direction: column;
+          gap: 10px;
+        }
+      }
+
+      /* Transiciones suaves */
+      * {
+        transition: background-color 0.3s ease, color 0.3s ease,
+          border-color 0.3s ease;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <span class="navbar-title">BlackQuery</span>
+      <div class="navbar-actions">
+        <button id="btn-inicio" onclick="redirectToHome()" class="btn panel">
+          🏠 Inicio
+        </button>
+        <button
+          id="btn-panel"
+          onclick="window.location.href='panel.html'"
+          class="btn panel"
+        >
+          📊 Panel
+        </button>
+        <button onclick="window.location.href='privacy.html'" class="btn panel">
+          🔒 Privacidad
+        </button>
+        <button onclick="logout()" class="btn logout">Cerrar Sesión</button>
+      </div>
+    </nav>
+
+    <div class="privacy-container">
+      <!-- Header de la página -->
+      <div class="page-header">
+        <h1>🛡️ Centro de Privacidad y Protección de Datos</h1>
+        <p>
+          Controla tus datos personales según el GDPR y LOPD. Aquí puedes
+          ejercer tus derechos de privacidad de forma segura y transparente.
+        </p>
+      </div>
+
+      <!-- Información sobre derechos -->
+      <div class="privacy-section">
+        <h2>
+          <span>⚖️</span>
+          <span>Tus Derechos de Privacidad</span>
+        </h2>
+        <p>
+          Según el Reglamento General de Protección de Datos (GDPR) y la Ley
+          Orgánica de Protección de Datos (LOPD), tienes derechos fundamentales
+          sobre tus datos personales:
+        </p>
+
+        <div class="rights-grid" id="rights-info">
+          <div class="empty-state loading">
+            <p>⏳ Cargando información de derechos...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Formularios para solicitudes -->
+      <div class="privacy-section">
+        <h2>
+          <span>📝</span>
+          <span>Crear Nueva Solicitud</span>
+        </h2>
+        <p style="margin-bottom: 20px">
+          Selecciona el tipo de solicitud que deseas realizar. Tu solicitud será
+          procesada por nuestro equipo en un plazo máximo de 30 días.
+        </p>
+
+        <div class="form-buttons">
+          <button class="btn-privacy" onclick="showAccessForm()">
+            📋 Solicitar Acceso a Datos
+          </button>
+          <button class="btn-privacy" onclick="showRectificationForm()">
+            ✏️ Rectificar Datos
+          </button>
+          <button class="btn-privacy btn-danger" onclick="showErasureForm()">
+            🗑️ Eliminar Mis Datos
+          </button>
+        </div>
+
+        <!-- Formulario de Acceso -->
+        <div id="access-form" class="request-form">
+          <h3>📋 Solicitud de Acceso a Datos Personales</h3>
+          <p style="color: var(--privacy-text-secondary); margin-bottom: 20px">
+            Solicita una copia completa de todos tus datos personales
+            almacenados en el sistema.
+          </p>
+          <form onsubmit="submitAccessRequest(event)">
+            <div class="form-group">
+              <label>📄 Descripción de la solicitud:</label>
+              <textarea
+                name="description"
+                placeholder="Describe qué información específica deseas obtener o deja este mensaje por defecto..."
+                required
+              >
+Solicito acceso a todos mis datos personales almacenados en el sistema, incluyendo proyectos, análisis y reportes generados.</textarea
+              >
+            </div>
+            <div style="display: flex; gap: 10px">
+              <button type="submit" class="btn-privacy btn-success">
+                ✅ Enviar Solicitud
+              </button>
+              <button type="button" class="btn-privacy" onclick="hideForms()">
+                ❌ Cancelar
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Formulario de Rectificación -->
+        <div id="rectification-form" class="request-form">
+          <h3>✏️ Solicitud de Rectificación de Datos</h3>
+          <p style="color: var(--privacy-text-secondary); margin-bottom: 20px">
+            Solicita la corrección de datos personales inexactos o incompletos.
+          </p>
+          <form onsubmit="submitRectificationRequest(event)">
+            <div class="form-group">
+              <label>📄 Descripción del cambio solicitado:</label>
+              <textarea
+                name="description"
+                placeholder="Describe qué datos necesitan ser corregidos y por qué..."
+                required
+              ></textarea>
+            </div>
+            <div class="form-group">
+              <label>📧 Nuevo correo electrónico (opcional):</label>
+              <input
+                type="email"
+                name="new_email"
+                placeholder="nuevo@ejemplo.com"
+              />
+              <small
+                style="
+                  color: var(--privacy-text-secondary);
+                  display: block;
+                  margin-top: 5px;
+                "
+              >
+                Solo completa este campo si deseas cambiar tu email registrado
+              </small>
+            </div>
+            <div style="display: flex; gap: 10px">
+              <button type="submit" class="btn-privacy btn-success">
+                ✅ Enviar Solicitud
+              </button>
+              <button type="button" class="btn-privacy" onclick="hideForms()">
+                ❌ Cancelar
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Formulario de Eliminación -->
+        <div id="erasure-form" class="request-form">
+          <h3>🗑️ Solicitud de Eliminación Completa de Datos</h3>
+          <div class="danger-box">
+            <strong>⚠️ ADVERTENCIA IMPORTANTE:</strong>
+            <p style="margin: 10px 0; color: var(--privacy-text-primary)">
+              Esta acción eliminará PERMANENTEMENTE e IRREVERSIBLEMENTE todos
+              tus datos:
+            </p>
+            <ul>
+              <li>✖️ Todos tus datos personales (nombre, email, etc.)</li>
+              <li>✖️ Todos los proyectos que hayas subido</li>
+              <li>✖️ Todos los análisis de seguridad realizados</li>
+              <li>✖️ Todos los reportes y vulnerabilidades detectadas</li>
+              <li>✖️ Todo tu historial y métricas</li>
+            </ul>
+            <p
+              style="
+                margin: 10px 0 0 0;
+                color: var(--privacy-text-primary);
+                font-weight: bold;
+              "
+            >
+              No podrás recuperar esta información una vez aprobada la
+              solicitud.
+            </p>
+          </div>
+          <form onsubmit="submitErasureRequest(event)">
+            <div class="form-group">
+              <label>📄 Motivo de la eliminación:</label>
+              <textarea
+                name="description"
+                placeholder="Por favor, explica brevemente por qué deseas eliminar tus datos..."
+                required
+              ></textarea>
+            </div>
+            <div class="form-group">
+              <label
+                style="display: flex; align-items: center; cursor: pointer"
+              >
+                <input
+                  type="checkbox"
+                  name="confirmation"
+                  required
+                  style="margin-right: 10px"
+                />
+                <span>
+                  He leído y entiendo que esta acción es
+                  <strong>IRREVERSIBLE</strong> y que todos mis datos serán
+                  eliminados permanentemente sin posibilidad de recuperación.
+                </span>
+              </label>
+            </div>
+            <div style="display: flex; gap: 10px">
+              <button type="submit" class="btn-privacy btn-danger">
+                🗑️ Solicitar Eliminación Permanente
+              </button>
+              <button type="button" class="btn-privacy" onclick="hideForms()">
+                ❌ Cancelar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Lista de solicitudes existentes -->
+      <div class="privacy-section">
+        <h2>
+          <span>📋</span>
+          <span>Historial de Solicitudes</span>
+        </h2>
+        <p style="margin-bottom: 20px">
+          Aquí puedes ver el estado de todas tus solicitudes de privacidad. Las
+          solicitudes se procesan en un plazo máximo de 30 días según el GDPR.
+        </p>
+        <div id="requests-list" class="requests-list">
+          <div class="empty-state loading">
+            <p>⏳ Cargando solicitudes...</p>
+          </div>
+        </div>
+        <button class="btn-privacy" onclick="loadPrivacyRequests()">
+          🔄 Actualizar Lista
+        </button>
+      </div>
+    </div>
+
+    <script src="js/dark-mode.js"></script>
+    <script src="js/api-service.js"></script>
+    <script src="js/autenticacion.js"></script>
+    <script>
+      // Función para redireccionar basado en el rol del usuario
+      function redirectToHome() {
+        try {
+          const userInfoString = localStorage.getItem("user_info");
+          if (userInfoString) {
+            const userInfo = JSON.parse(userInfoString);
+            const userRole = userInfo.rol || userInfo.role; // Soporta ambas variantes
+
+            if (userRole === "docente") {
+              window.location.href = "docente.html";
+            } else {
+              window.location.href = "principal.html";
+            }
+          } else {
+            // Si no hay user_info, redirigir a principal por defecto
+            window.location.href = "principal.html";
+          }
+        } catch (error) {
+          console.error("Error al obtener rol del usuario:", error);
+          window.location.href = "principal.html";
+        }
+      }
+
+      // Configurar navbar según el rol del usuario
+      function setupNavbarByRole() {
+        try {
+          const userInfoString = localStorage.getItem("user_info");
+          if (userInfoString) {
+            const userInfo = JSON.parse(userInfoString);
+            const userRole = userInfo.rol || userInfo.role; // Soporta ambas variantes
+            const btnPanel = document.getElementById("btn-panel");
+
+            // Si es docente, ocultar el botón de Panel
+            if (userRole === "docente" && btnPanel) {
+              btnPanel.style.display = "none";
+            }
+          }
+        } catch (error) {
+          console.error("Error al configurar navbar:", error);
+        }
+      }
+
+      // Cargar información al inicio
+      window.onload = async () => {
+        setupNavbarByRole();
+        await Promise.all([loadPrivacyRights(), loadPrivacyRequests()]);
+      };
+
+      async function loadPrivacyRights() {
+        try {
+          const rightsInfo = await apiService.getPrivacyRightsInfo();
+          const container = document.getElementById("rights-info");
+
+          container.innerHTML = Object.values(rightsInfo.rights)
+            .map(
+              (right) => `
+                    <div class="right-card">
+                        <h3>${right.title}</h3>
+                        <p>${right.description}</p>
+                        ${
+                          right.warning
+                            ? `<div class="warning-box"><strong>⚠️</strong> ${right.warning}</div>`
+                            : ""
+                        }
+                    </div>
+                `
+            )
+            .join("");
+        } catch (error) {
+          console.error("Error cargando derechos:", error);
+          document.getElementById("rights-info").innerHTML = `
+            <div class="empty-state">
+              <p style="color: var(--privacy-danger);">❌ Error al cargar información de derechos</p>
+            </div>
+          `;
+        }
+      }
+
+      async function loadPrivacyRequests() {
+        try {
+          const requests = await apiService.getMyPrivacyRequests();
+          const container = document.getElementById("requests-list");
+
+          if (requests.length === 0) {
+            container.innerHTML = `
+              <div class="empty-state">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+                <h3 style="color: var(--privacy-text-primary);">Sin solicitudes</h3>
+                <p>No tienes solicitudes de privacidad registradas.</p>
+                <p style="font-size: 0.9rem;">Crea una nueva solicitud usando los botones de arriba.</p>
+              </div>
+            `;
+            return;
+          }
+
+          // Función auxiliar para formatear el tipo de solicitud
+          const formatType = (type) => {
+            const types = {
+              access: { icon: "📋", text: "Acceso a Datos" },
+              rectification: { icon: "✏️", text: "Rectificación" },
+              erasure: { icon: "🗑️", text: "Eliminación" },
+            };
+            return types[type] || { icon: "📄", text: type };
+          };
+
+          // Función auxiliar para formatear el estado
+          const formatStatus = (status) => {
+            const statuses = {
+              pending: "⏳ Pendiente",
+              in_progress: "⚙️ En Proceso",
+              completed: "✅ Completada",
+              rejected: "❌ Rechazada",
+            };
+            return statuses[status] || status;
+          };
+
+          container.innerHTML = requests
+            .map((req) => {
+              const typeInfo = formatType(req.request_type);
+              const statusText = formatStatus(req.status);
+
+              return `
+                    <div class="request-item">
+                        <div class="request-header">
+                            <div>
+                                <h4>${typeInfo.icon} ${typeInfo.text}</h4>
+                                <p><strong>ID:</strong> #${req.id}</p>
+                                <p><strong>Descripción:</strong> ${
+                                  req.description
+                                }</p>
+                                <p><strong>📅 Creada:</strong> ${new Date(
+                                  req.created_at
+                                ).toLocaleString("es-ES", {
+                                  year: "numeric",
+                                  month: "long",
+                                  day: "numeric",
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                })}</p>
+                                ${
+                                  req.processed_at
+                                    ? `<p><strong>⚙️ Procesada:</strong> ${new Date(
+                                        req.processed_at
+                                      ).toLocaleString("es-ES", {
+                                        year: "numeric",
+                                        month: "long",
+                                        day: "numeric",
+                                        hour: "2-digit",
+                                        minute: "2-digit",
+                                      })}</p>`
+                                    : ""
+                                }
+                                ${
+                                  req.completed_at
+                                    ? `<p><strong>✅ Completada:</strong> ${new Date(
+                                        req.completed_at
+                                      ).toLocaleString("es-ES", {
+                                        year: "numeric",
+                                        month: "long",
+                                        day: "numeric",
+                                        hour: "2-digit",
+                                        minute: "2-digit",
+                                      })}</p>`
+                                    : ""
+                                }
+                            </div>
+                            <div>
+                                <span class="request-status status-${req.status.toLowerCase()}">
+                                    ${statusText}
+                                </span>
+                            </div>
+                        </div>
+                        ${
+                          req.is_expired && req.status === "pending"
+                            ? '<div class="warning-box" style="margin-top: 15px;"><strong>⚠️ Solicitud expirada:</strong> Ha superado el plazo legal de 30 días. Contacta al administrador.</div>'
+                            : ""
+                        }
+                        ${
+                          req.status === "pending"
+                            ? '<p style="color: var(--privacy-text-secondary); margin-top: 10px; font-size: 0.9rem;">⏱️ Tu solicitud está en espera de ser procesada por un administrador.</p>'
+                            : ""
+                        }
+                    </div>
+                `;
+            })
+            .join("");
+        } catch (error) {
+          console.error("Error cargando solicitudes:", error);
+          document.getElementById("requests-list").innerHTML = `
+            <div class="empty-state">
+              <p style="color: var(--privacy-danger);">❌ Error al cargar solicitudes</p>
+              <p style="font-size: 0.9rem;">${error.message}</p>
+            </div>
+          `;
+        }
+      }
+
+      // Mostrar formularios
+      function showAccessForm() {
+        hideForms();
+        document.getElementById("access-form").style.display = "block";
+        document
+          .getElementById("access-form")
+          .scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+
+      function showRectificationForm() {
+        hideForms();
+        document.getElementById("rectification-form").style.display = "block";
+        document
+          .getElementById("rectification-form")
+          .scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+
+      function showErasureForm() {
+        hideForms();
+        document.getElementById("erasure-form").style.display = "block";
+        document
+          .getElementById("erasure-form")
+          .scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+
+      function hideForms() {
+        document.querySelectorAll(".request-form").forEach((form) => {
+          form.style.display = "none";
+        });
+      }
+
+      // Enviar solicitudes
+      async function submitAccessRequest(event) {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        const submitBtn = event.target.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+
+        try {
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = "⏳ Enviando...";
+
+          await apiService.createAccessRequest(formData.get("description"));
+
+          // Mostrar alerta de éxito moderna
+          showSuccessAlert(
+            "✅ Solicitud Enviada",
+            "Tu solicitud de acceso a datos ha sido enviada correctamente. Será procesada en un plazo máximo de 30 días."
+          );
+
+          hideForms();
+          loadPrivacyRequests();
+          event.target.reset();
+        } catch (error) {
+          showErrorAlert("❌ Error al Enviar Solicitud", error.message);
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalText;
+        }
+      }
+
+      async function submitRectificationRequest(event) {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        const submitBtn = event.target.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+
+        const rectificationData = {};
+        if (formData.get("new_email")) {
+          rectificationData.email = formData.get("new_email");
+        }
+
+        if (Object.keys(rectificationData).length === 0) {
+          showErrorAlert(
+            "⚠️ Campos Vacíos",
+            "Por favor especifica al menos un campo a modificar (email)."
+          );
+          return;
+        }
+
+        try {
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = "⏳ Enviando...";
+
+          await apiService.createRectificationRequest(
+            formData.get("description"),
+            rectificationData
+          );
+
+          showSuccessAlert(
+            "✅ Solicitud Enviada",
+            "Tu solicitud de rectificación ha sido enviada correctamente. Será revisada por un administrador."
+          );
+
+          hideForms();
+          loadPrivacyRequests();
+          event.target.reset();
+        } catch (error) {
+          showErrorAlert("❌ Error al Enviar Solicitud", error.message);
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalText;
+        }
+      }
+
+      async function submitErasureRequest(event) {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        const submitBtn = event.target.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+
+        if (!formData.get("confirmation")) {
+          showErrorAlert(
+            "⚠️ Confirmación Requerida",
+            "Debes confirmar que entiendes que la eliminación es irreversible."
+          );
+          return;
+        }
+
+        if (
+          !confirm(
+            "⚠️ CONFIRMACIÓN FINAL\n\n¿Estás COMPLETAMENTE SEGURO de que quieres eliminar todos tus datos?\n\n" +
+              "Esta acción:\n" +
+              "• Es PERMANENTE e IRREVERSIBLE\n" +
+              "• Eliminará TODOS tus proyectos\n" +
+              "• Eliminará TODOS tus análisis\n" +
+              "• Eliminará TODA tu información\n\n" +
+              "NO podrás recuperar esta información una vez aprobada.\n\n" +
+              "Haz clic en 'Aceptar' solo si estás completamente seguro."
+          )
+        ) {
+          return;
+        }
+
+        try {
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = "⏳ Enviando...";
+
+          await apiService.createErasureRequest(
+            formData.get("description"),
+            true
+          );
+
+          showSuccessAlert(
+            "⚠️ Solicitud de Eliminación Enviada",
+            "Tu solicitud ha sido enviada. Un administrador la revisará antes de proceder con la eliminación permanente de tus datos."
+          );
+
+          hideForms();
+          loadPrivacyRequests();
+          event.target.reset();
+        } catch (error) {
+          showErrorAlert("❌ Error al Enviar Solicitud", error.message);
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalText;
+        }
+      }
+
+      // Funciones auxiliares para alertas mejoradas
+      function showSuccessAlert(title, message) {
+        alert(`${title}\n\n${message}`);
+      }
+
+      function showErrorAlert(title, message) {
+        alert(`${title}\n\n${message}`);
+      }
+    </script>
+  </body>
+</html>

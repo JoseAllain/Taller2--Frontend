@@ -6,21 +6,28 @@
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="stylesheet" href="css/dark-mode-base.css" />
     <link rel="stylesheet" href="css/dark-mode-principal.css" />
+    <script src="js/api-service.js" defer></script>
     <script src="js/autenticacion.js" defer></script>
     <script src="js/principal.js" defer></script>
     <script src="js/dark-mode.js" defer></script>
   </head>
   <body>
     <div class="hero">
-      <div class="navbar">
+      <nav class="navbar">
         <span class="navbar-title">BlackQuery</span>
-        <button onclick="logout()" class="btn logout">Cerrar sesión</button>
-        <!--
-        <button class="btn panel" onclick="window.location.href='panel.html'">
-          Ver mis proyectos analizados
-        </button>
-        -->
-      </div>
+        <div class="navbar-actions">
+          <button class="btn panel" onclick="window.location.href='panel.html'">
+            📊 Mis Proyectos
+          </button>
+          <button
+            class="btn panel"
+            onclick="window.location.href='privacy.html'"
+          >
+            🔒 Privacidad
+          </button>
+          <button onclick="logout()" class="btn logout">Cerrar Sesión</button>
+        </div>
+      </nav>
 
       <h1>
         Inserta tu código en Java y<br />
@@ -48,7 +55,30 @@
             readonly
             placeholder="Ningún archivo seleccionado"
           />
-          <button type="button" onclick="subirZip()">Subir</button>
+          <button
+            type="button"
+            onclick="subirZip(event)"
+            class="upload-btn"
+            id="upload-btn"
+          >
+            Subir
+          </button>
+        </div>
+
+        <!-- Checkbox de aceptación de Ley de Protección de Datos -->
+        <div class="consent-container">
+          <label class="consent-label">
+            <input
+              type="checkbox"
+              id="data-consent"
+              class="consent-checkbox"
+              onchange="toggleUploadButton()"
+            />
+            <span class="consent-text">
+              De conformidad con la
+              <strong>Ley N°29733 de Protección de Datos Personales</strong>
+            </span>
+          </label>
         </div>
       </form>
     </div>

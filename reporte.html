@@ -21,6 +21,7 @@
     <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
 
     <!-- JS funciones -->
+    <script src="js/api-service.js" defer></script>
     <script src="js/autenticacion.js" defer></script>
     <script src="js/reporte.js" defer></script>
     <script src="js/dark-mode.js" defer></script>
@@ -67,6 +68,21 @@
             <h2>Vulnerabilidades encontradas</h2>
             <div id="report-container"></div>
           </div>
+
+          <!-- Contenedores para componentes con lazy loading -->
+          <div class="additional-sections">
+            <div id="summary-container" class="lazy-section">
+              <!-- Se carga de forma diferida -->
+            </div>
+
+            <div id="metrics-container" class="lazy-section">
+              <!-- Se carga de forma diferida -->
+            </div>
+
+            <div id="graph-container" class="lazy-section">
+              <!-- Se carga de forma diferida -->
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -76,7 +92,7 @@
       <iframe id="heatmap-frame" width="100%" height="800" style="border: 1px solid #ccc;"></iframe>
 
     </section>-->
-    <section>
+    <!--<section>
       <h2>Flujo de Código</h2>
       <iframe
         class="grafo"
@@ -86,6 +102,6 @@
         height="600"
         style="border: 1px solid #ccc"
       ></iframe>
-    </section>
   </body>
+    </section>-->
 </html>

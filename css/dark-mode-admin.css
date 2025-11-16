@@ -1,0 +1,205 @@
+/* Modo Oscuro para Admin Panel */
+
+/* Formularios de creación */
+[data-theme="dark"] #create-treatment-form,
+[data-theme="dark"] #create-dpa-form {
+  background: #2c3e50 !important;
+  color: #ecf0f1 !important;
+}
+
+/* Modales con fondo blanco hardcodeado */
+[data-theme="dark"] #create-user-modal > div,
+[data-theme="dark"] div[style*="background: white"],
+[data-theme="dark"] div[style*="background:white"] {
+  background: #2c3e50 !important;
+  color: #ecf0f1 !important;
+}
+
+/* Títulos en modales */
+[data-theme="dark"] #create-user-modal h4,
+[data-theme="dark"] #modal-title {
+  color: #ecf0f1 !important;
+}
+
+/* Inputs y selects en formularios */
+[data-theme="dark"] .form-group input,
+[data-theme="dark"] .form-group select,
+[data-theme="dark"] .form-group textarea {
+  background: #34495e !important;
+  border-color: #2c3e50 !important;
+  color: #ecf0f1 !important;
+}
+
+[data-theme="dark"] .form-group input:focus,
+[data-theme="dark"] .form-group select:focus,
+[data-theme="dark"] .form-group textarea:focus {
+  border-color: #667eea !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15) !important;
+}
+
+[data-theme="dark"] .form-group input::placeholder,
+[data-theme="dark"] .form-group textarea::placeholder {
+  color: #95a5a6 !important;
+}
+
+/* Labels en modo oscuro */
+[data-theme="dark"] .form-group label {
+  color: #ecf0f1 !important;
+}
+
+/* Admin sections */
+[data-theme="dark"] .admin-section {
+  background: #2c3e50 !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Tabs */
+[data-theme="dark"] .tabs {
+  background: #34495e !important;
+}
+
+[data-theme="dark"] .tab {
+  background: #2c3e50 !important;
+  color: #ecf0f1 !important;
+}
+
+[data-theme="dark"] .tab.active {
+  background: #3498db !important;
+  color: white !important;
+}
+
+[data-theme="dark"] .tab:hover:not(.active) {
+  background: #34495e !important;
+}
+
+/* Tables */
+[data-theme="dark"] .data-table th,
+[data-theme="dark"] .data-table td {
+  border-bottom-color: #34495e !important;
+  color: #ecf0f1 !important;
+}
+
+[data-theme="dark"] .data-table th {
+  background: #34495e !important;
+}
+
+[data-theme="dark"] .data-table tr:hover {
+  background: #34495e !important;
+}
+
+/* Alert items */
+[data-theme="dark"] .alert-item {
+  background: #34495e !important;
+  border-color: #2c3e50 !important;
+  color: #ecf0f1 !important;
+}
+
+[data-theme="dark"] .alert-item.critical {
+  background: #5d4e60 !important;
+  border-color: #4a3f50 !important;
+}
+
+/* Status badges - mantener colores originales para visibilidad */
+[data-theme="dark"] .status-badge {
+  background: inherit;
+  color: inherit;
+}
+
+/* Compliance summary - mantener gradiente pero ajustar opacidad */
+[data-theme="dark"] .compliance-summary {
+  opacity: 0.9;
+}
+
+/* Dashboard cards - mantener gradientes pero con mejor contraste */
+[data-theme="dark"] .dashboard-card {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+/* Alerts */
+[data-theme="dark"] .alert-success {
+  background: #1e4620 !important;
+  color: #9ae6b4 !important;
+  border: 1px solid #2f855a !important;
+}
+
+[data-theme="dark"] .alert-error {
+  background: #5a1a1a !important;
+  color: #fc8181 !important;
+  border: 1px solid #9b2c2c !important;
+}
+
+[data-theme="dark"] .alert-info {
+  background: #1a3a52 !important;
+  color: #63b3ed !important;
+  border: 1px solid #2c5282 !important;
+}
+
+/* Danger box */
+[data-theme="dark"] .danger-box {
+  background: #5a1a1a !important;
+  border-color: #9b2c2c !important;
+  color: #fc8181 !important;
+}
+
+/* Modal overlay */
+[data-theme="dark"] .modal-overlay {
+  background: rgba(0, 0, 0, 0.7) !important;
+  backdrop-filter: blur(4px);
+}
+
+[data-theme="dark"] .modal-content {
+  background: #2c3e50 !important;
+  color: #ecf0f1 !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7) !important;
+}
+
+/* Títulos y textos */
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3,
+[data-theme="dark"] h4,
+[data-theme="dark"] h5 {
+  color: #ecf0f1 !important;
+}
+
+/* Container principal */
+[data-theme="dark"] .admin-container {
+  background: #1a1a2e;
+}
+
+/* Inputs readonly */
+[data-theme="dark"] .form-group input[readonly] {
+  background: #1a202c !important;
+  color: #a0aec0 !important;
+  cursor: not-allowed;
+}
+
+/* Selects - estilo de opciones */
+[data-theme="dark"] .form-group select option {
+  background: #34495e !important;
+  color: #ecf0f1 !important;
+}
+
+/* Mejoras de accesibilidad */
+[data-theme="dark"] .btn-admin {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .btn-admin:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* Asegurar que todos los divs con inline styles sean oscuros */
+[data-theme="dark"] div[style*="background: #f8f9fa"],
+[data-theme="dark"] div[style*="background:#f8f9fa"] {
+  background: #2c3e50 !important;
+}
+
+/* Dashboard grid cards - texto blanco visible */
+[data-theme="dark"] .dashboard-card h3,
+[data-theme="dark"] .dashboard-card p,
+[data-theme="dark"] .dashboard-card .number {
+  color: white !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}

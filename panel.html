@@ -4,23 +4,181 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mis Proyectos - BlackQuery</title>
+    <link rel="stylesheet" href="css/styles.css" />
     <link rel="stylesheet" href="css/panel_css.css" />
     <link rel="stylesheet" href="css/dark-mode-base.css" />
     <link rel="stylesheet" href="css/dark-mode-panel.css" />
+    <script defer src="js/api-service.js"></script>
     <script defer src="js/panel.js"></script>
     <script defer src="js/dark-mode.js"></script>
   </head>
   <body>
-    <div class="navbar">
+    <nav class="navbar">
       <span class="navbar-title">BlackQuery</span>
-      <button onclick="logout()" class="btn logout">Cerrar sesión</button>
-      <button onclick="window.location.href='principal.html'" class="btn atras">
-        Atrás
-      </button>
-    </div>
+      <div class="navbar-actions">
+        <button
+          onclick="window.location.href='principal.html'"
+          class="btn panel"
+        >
+          🏠 Inicio
+        </button>
+        <button onclick="window.location.href='panel.html'" class="btn panel">
+          📊 Panel
+        </button>
+        <button onclick="window.location.href='privacy.html'" class="btn panel">
+          🔒 Privacidad
+        </button>
+        <button onclick="logout()" class="btn logout">Cerrar Sesión</button>
+      </div>
+    </nav>
     <div class="panel-container">
+      <!-- Información del usuario -->
+      <div id="user-info" class="user-section">
+        <!-- Se carga dinámicamente -->
+      </div>
+
       <h1>Mis Proyectos Analizados</h1>
       <ul id="lista-proyectos" class="project-list"></ul>
+
+      <!-- Sección para reportes accesibles (administradores/docentes) -->
+      <div id="reportes-todos" class="admin-reports-section">
+        <!-- Se carga dinámicamente para usuarios privilegiados -->
+      </div>
     </div>
+
+    <!-- Estilos adicionales para las nuevas funcionalidades -->
+    <style>
+      .user-section {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+      }
+
+      .user-card h3 {
+        color: #333;
+        margin: 0 0 10px 0;
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: bold;
+        margin-left: 10px;
+      }
+
+      .badge.admin {
+        background: #28a745;
+        color: white;
+      }
+
+      .badge.user {
+        background: #007bff;
+        color: white;
+      }
+
+      .project-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+      }
+
+      .btn-metrics,
+      .btn-analyze {
+        background: #6c757d;
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 12px;
+      }
+
+      .btn-metrics:hover {
+        background: #5a6268;
+      }
+
+      .btn-analyze:hover {
+        background: #545b62;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 40px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        margin: 20px 0;
+      }
+
+      .btn-primary {
+        background: #007bff;
+        color: white;
+        text-decoration: none;
+        padding: 12px 24px;
+        border-radius: 6px;
+        display: inline-block;
+        margin-top: 15px;
+      }
+
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+      }
+
+      .modal-content {
+        background: white;
+        border-radius: 10px;
+        padding: 30px;
+        max-width: 600px;
+        max-height: 80vh;
+        overflow-y: auto;
+      }
+
+      .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
+        margin: 20px 0;
+      }
+
+      .metric-card {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        text-align: center;
+      }
+
+      .metric-card h4 {
+        margin: 0 0 10px 0;
+        color: #333;
+      }
+
+      .metric-card p {
+        font-size: 24px;
+        font-weight: bold;
+        color: #007bff;
+        margin: 0;
+      }
+
+      .btn-close {
+        background: #6c757d;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-top: 20px;
+      }
+    </style>
   </body>
 </html>

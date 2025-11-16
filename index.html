@@ -7,6 +7,59 @@
     <link rel="stylesheet" href="css/index.css" />
     <link rel="stylesheet" href="css/dark-mode-base.css" />
     <link rel="stylesheet" href="css/dark-mode-login.css" />
+    <style>
+      /* Estilos adicionales para el dropdown de rol */
+      .input-field select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background: white;
+        font-size: 14px;
+        color: #333;
+        cursor: pointer;
+      }
+
+      .input-field select:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+      }
+
+      .input-field label {
+        position: absolute;
+        top: 50%;
+        left: 10px;
+        transform: translateY(-50%);
+        color: #999;
+        font-size: 14px;
+        pointer-events: none;
+        transition: all 0.3s;
+      }
+
+      .input-field select:focus + label,
+      .input-field select:valid + label {
+        top: -5px;
+        left: 5px;
+        font-size: 12px;
+        color: #007bff;
+        background: white;
+        padding: 0 5px;
+      }
+
+      /* Estilos para dark mode */
+      body.dark-mode .input-field select {
+        background: #2c3e50;
+        border-color: #34495e;
+        color: #ecf0f1;
+      }
+
+      body.dark-mode .input-field select:focus + label,
+      body.dark-mode .input-field select:valid + label {
+        background: #2c3e50;
+        color: #3498db;
+      }
+    </style>
   </head>
   <body>
     <div class="container">
@@ -35,16 +88,20 @@
         <form id="form-registro" class="form">
           <h2>Registro</h2>
           <div class="input-field">
-            <input type="text" id="reg-nombre" required />
-            <label>Ingresa tu nombre</label>
-          </div>
-          <div class="input-field">
             <input type="email" id="reg-correo" required />
             <label>Ingresa tu correo</label>
           </div>
           <div class="input-field">
-            <input type="password" id="reg-password" required />
+            <input type="password" id="reg-contrasena" required />
             <label>Crea una contraseña</label>
+          </div>
+          <div class="input-field">
+            <select id="reg-rol">
+              <option value="estudiante" selected>Estudiante</option>
+              <option value="docente">Docente</option>
+              <option value="administrador">Administrador</option>
+            </select>
+            <label>Selecciona tu rol</label>
           </div>
           <button type="submit">Registrarse</button>
           <div class="register">
@@ -58,7 +115,7 @@
     </div>
 
     <script>
-      const backendURL = "http://localhost:8000";
+      const backendURL = "https://sqli-ecologico-backend.onrender.com";
 
       // Alternar formularios
       document.getElementById("toggle-to-register").onclick = (e) => {
@@ -73,17 +130,13 @@
         document.getElementById("form-login").classList.add("active");
       };
 
-      function validarNombre(nombre) {
-        const regex = /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+$/;
-        return regex.test(nombre.trim());
-      }
-
       function validarCorreo(correo) {
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return regex.test(correo.trim());
       }
 
       function validarContrasena(contrasena) {
+        // Al menos 6 caracteres, una mayúscula, una minúscula, un número y un símbolo
         const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,}$/;
         return regex.test(contrasena);
       }
@@ -94,21 +147,16 @@
         .addEventListener("submit", async function (e) {
           e.preventDefault();
 
-          const nombre = document.getElementById("reg-nombre").value;
-          const email = document.getElementById("reg-correo").value;
-          const password = document.getElementById("reg-password").value;
+          const correo = document.getElementById("reg-correo").value;
+          const contrasena = document.getElementById("reg-contrasena").value;
+          const rol = document.getElementById("reg-rol").value;
 
-          if (!validarNombre(nombre)) {
-            alert("El nombre solo debe contener letras y espacios.");
-            return;
-          }
-
-          if (!validarCorreo(email)) {
+          if (!validarCorreo(correo)) {
             alert("El correo no tiene un formato válido.");
             return;
           }
 
-          if (!validarContrasena(password)) {
+          if (!validarContrasena(contrasena)) {
             alert(
               "La contraseña debe tener al menos 6 caracteres, una mayúscula, una minúscula, un número y un símbolo."
             );
@@ -116,25 +164,13 @@
           }
 
           try {
-            const res = await fetch(`${backendURL}/auth/register`, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ email, password }),
-            });
-
-            const data = await res.json();
-            if (res.ok) {
-              alert("Usuario registrado correctamente");
-              document.getElementById("toggle-to-login").click();
-            } else {
-              const mensaje =
-                typeof data.detail === "string"
-                  ? data.detail
-                  : JSON.stringify(data.detail);
-              alert("Error: " + mensaje);
-            }
-          } catch (err) {
-            alert("Error de conexión con el servidor");
+            const data = await apiService.register(correo, contrasena, rol);
+            alert(`✅ ${data.mensaje}`);
+            document.getElementById("toggle-to-login").click();
+            // Limpiar el formulario
+            document.getElementById("form-registro").reset();
+          } catch (error) {
+            alert("❌ Error en el registro: " + error.message);
           }
         });
 
@@ -144,27 +180,38 @@
         const username = document.getElementById("login-correo").value;
         const password = document.getElementById("login-password").value;
 
-        try {
-          const res = await fetch(`${backendURL}/auth/login`, {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: new URLSearchParams({ username, password }),
-          });
+        if (!validarCorreo(username)) {
+          alert("Por favor ingresa un correo válido.");
+          return;
+        }
 
-          const data = await res.json();
-          if (res.ok) {
-            localStorage.setItem("token", data.access_token);
-            localStorage.setItem("user_id", data.user_id);
-            alert("Inicio de sesión exitoso");
-            window.location.href = "principal.html";
+        try {
+          const data = await apiService.login(username, password);
+
+          // Guardar información del usuario
+          localStorage.setItem("token", data.token_acceso);
+          localStorage.setItem("user_info", JSON.stringify(data.info_usuario));
+
+          alert(
+            `✅ Bienvenido ${data.info_usuario.correo} (${data.info_usuario.rol})`
+          );
+
+          // Redirigir según el rol específico
+          const rol = data.info_usuario.rol.toLowerCase();
+
+          if (rol === "administrador") {
+            window.location.href = "admin.html";
+          } else if (rol === "docente") {
+            window.location.href = "docente.html";
           } else {
-            alert(data.detail || "Error al iniciar sesión");
+            window.location.href = "principal.html";
           }
-        } catch (err) {
-          alert("Error de conexión con el servidor");
+        } catch (error) {
+          alert("❌ Error al iniciar sesión: " + error.message);
         }
       };
     </script>
+    <script src="js/api-service.js"></script>
     <script src="js/dark-mode.js"></script>
   </body>
 </html>
