@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard Administrativo - BlackQuery</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/dark-mode-base.css" />
+    <link rel="stylesheet" href="css/dark-mode-principal.css" />
+    <link rel="stylesheet" href="css/dark-mode-admin.css" />
+    <link rel="stylesheet" href="css/dashboard-admin.css" />
+
+    <!-- Chart.js para gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <style>
+      body {
+        background: var(--bg-color, #f4f6f9);
+        color: var(--text-color, #333);
+        transition: all 0.3s ease;
+        margin: 0;
+        padding: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      [data-theme="dark"] body {
+        background: #1a1a2e !important;
+        color: #ecf0f1 !important;
+      }
+
+      .dashboard-container {
+        max-width: 1600px;
+        margin: 0 auto;
+        padding: 20px;
+        min-height: 100vh;
+      }
+
+      .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        padding: 20px;
+        background: var(--card-bg, white);
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      [data-theme="dark"] .dashboard-header {
+        background: #2c3e50 !important;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3) !important;
+      }
+
+      .dashboard-header h1 {
+        margin: 0;
+        color: var(--text-color, #333);
+      }
+
+      [data-theme="dark"] .dashboard-header h1 {
+        color: #ecf0f1 !important;
+      }
+
+      .header-actions {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+      }
+
+      .metric-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        cursor: pointer;
+      }
+
+      .metric-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      .metric-card.blue {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+      .metric-card.green {
+        background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+      }
+      .metric-card.orange {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      }
+      .metric-card.purple {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      }
+      .metric-card.red {
+        background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+      }
+      .metric-card.teal {
+        background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+      }
+
+      .metric-card .icon {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+        opacity: 0.9;
+      }
+
+      .metric-card .value {
+        font-size: 2.5em;
+        font-weight: bold;
+        margin: 10px 0;
+      }
+
+      .metric-card .label {
+        font-size: 1em;
+        opacity: 0.9;
+        font-weight: 500;
+      }
+
+      .metric-card .sublabel {
+        font-size: 0.85em;
+        opacity: 0.7;
+        margin-top: 5px;
+      }
+
+      .charts-section {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+      }
+
+      .chart-card {
+        background: var(--card-bg, white);
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      [data-theme="dark"] .chart-card {
+        background: #2c3e50 !important;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3) !important;
+      }
+
+      .chart-card h3 {
+        margin: 0 0 20px 0;
+        color: var(--text-color, #333);
+        font-size: 1.2em;
+      }
+
+      [data-theme="dark"] .chart-card h3 {
+        color: #ecf0f1 !important;
+      }
+
+      .chart-container {
+        position: relative;
+        height: 300px;
+      }
+
+      .full-width-chart {
+        grid-column: 1 / -1;
+      }
+
+      .activity-list {
+        background: var(--card-bg, white);
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        max-height: 500px;
+        overflow-y: auto;
+      }
+
+      [data-theme="dark"] .activity-list {
+        background: #2c3e50 !important;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3) !important;
+      }
+
+      .activity-item {
+        padding: 15px;
+        margin: 10px 0;
+        border-left: 4px solid #667eea;
+        background: var(--table-header-bg, #f8f9fa);
+        border-radius: 6px;
+        transition: all 0.3s ease;
+      }
+
+      [data-theme="dark"] .activity-item {
+        background: #34495e !important;
+        border-left-color: #3498db !important;
+      }
+
+      .activity-item:hover {
+        transform: translateX(5px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .activity-item .time {
+        font-size: 0.85em;
+        color: #666;
+        margin-bottom: 5px;
+      }
+
+      [data-theme="dark"] .activity-item .time {
+        color: #95a5a6 !important;
+      }
+
+      .activity-item .description {
+        font-weight: 500;
+        color: var(--text-color, #333);
+      }
+
+      [data-theme="dark"] .activity-item .description {
+        color: #ecf0f1 !important;
+      }
+
+      .loading-spinner {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 200px;
+      }
+
+      .spinner {
+        border: 4px solid rgba(0, 0, 0, 0.1);
+        border-left-color: #667eea;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .refresh-btn {
+        background: #667eea;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .refresh-btn:hover {
+        background: #5568d3;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+      }
+
+      .refresh-btn:active {
+        transform: translateY(0);
+      }
+
+      .btn-back {
+        background: #6c757d;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+
+      .btn-back:hover {
+        background: #5a6268;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+      }
+
+      .error-message {
+        background: #f8d7da;
+        color: #721c24;
+        padding: 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+        border-left: 4px solid #dc3545;
+      }
+
+      [data-theme="dark"] .error-message {
+        background: #5a1a1a !important;
+        color: #fc8181 !important;
+        border-left-color: #9b2c2c !important;
+      }
+
+      .health-indicator {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        margin-right: 8px;
+      }
+
+      .health-indicator.healthy {
+        background: #28a745;
+      }
+      .health-indicator.warning {
+        background: #ffc107;
+      }
+      .health-indicator.critical {
+        background: #dc3545;
+      }
+
+      /* Estilos responsivos */
+      @media (max-width: 768px) {
+        .metrics-grid {
+          grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        }
+
+        .charts-section {
+          grid-template-columns: 1fr;
+        }
+
+        .dashboard-header {
+          flex-direction: column;
+          gap: 15px;
+        }
+
+        .header-actions {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+
+      .timestamp {
+        font-size: 0.9em;
+        color: #666;
+        margin-top: 5px;
+      }
+
+      [data-theme="dark"] .timestamp {
+        color: #95a5a6 !important;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <span class="navbar-title">📊 Dashboard Administrativo</span>
+      <div class="navbar-actions">
+        <button onclick="goToHomePage()" class="btn panel">
+          ← Volver al Inicio
+        </button>
+        <button onclick="logout()" class="btn logout">Cerrar Sesión</button>
+      </div>
+    </nav>
+
+    <div class="dashboard-container" style="margin-top: 70px">
+      <!-- Header del Dashboard -->
+      <div class="dashboard-header">
+        <div>
+          <h1>📊 Panel de Control Administrativo</h1>
+          <p class="timestamp" id="last-update">
+            Última actualización: Cargando...
+          </p>
+        </div>
+        <div class="header-actions">
+          <button class="btn-back" onclick="goToHomePage()">
+            ← Volver al Inicio
+          </button>
+          <button
+            class="refresh-btn"
+            onclick="loadAllMetrics()"
+            id="refresh-btn"
+          >
+            <span id="refresh-icon">🔄</span>
+            <span>Actualizar</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Loading State -->
+      <div id="loading-state" class="loading-spinner">
+        <div class="spinner"></div>
+      </div>
+
+      <!-- Dashboard Content -->
+      <div id="dashboard-content" style="display: none">
+        <!-- Métricas Principales -->
+        <div class="metrics-grid" id="metrics-grid">
+          <!-- Se llenan dinámicamente con JavaScript -->
+        </div>
+
+        <!-- Gráficos -->
+        <div class="charts-section">
+          <!-- Gráfico de Usuarios por Rol -->
+          <div class="chart-card">
+            <h3 id="users-chart-title">👥 Distribución de Usuarios por Rol</h3>
+            <div class="chart-container">
+              <canvas id="usersRoleChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Gráfico de Proyectos -->
+          <div class="chart-card">
+            <h3>📁 Estado de Proyectos</h3>
+            <div class="chart-container">
+              <canvas id="projectsChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Gráfico de Vulnerabilidades por Severidad -->
+          <div class="chart-card">
+            <h3>🔒 Vulnerabilidades por Severidad</h3>
+            <div class="chart-container">
+              <canvas id="vulnerabilitiesChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Gráfico de Tiempos de Análisis -->
+          <div class="chart-card">
+            <h3>⏱️ Estadísticas de Análisis</h3>
+            <div class="chart-container">
+              <canvas id="analysisTimeChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Gráfico de Tamaño de Archivos -->
+          <div class="chart-card">
+            <h3>📦 Tamaño de Archivos</h3>
+            <div class="chart-container">
+              <canvas id="filesChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Gráfico de Salud del Sistema -->
+          <div class="chart-card">
+            <h3>💚 Salud del Sistema</h3>
+            <div class="chart-container">
+              <canvas id="systemHealthChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Actividad Reciente -->
+        <div class="activity-list">
+          <h3>📋 Actividad Reciente del Sistema</h3>
+          <div id="recent-activity">
+            <!-- Se llena dinámicamente -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Error State -->
+      <div id="error-state" style="display: none">
+        <div class="error-message">
+          <h3>❌ Error al cargar métricas</h3>
+          <p id="error-message">
+            No se pudieron cargar las métricas del sistema.
+          </p>
+          <button
+            class="refresh-btn"
+            onclick="loadAllMetrics()"
+            style="margin-top: 15px"
+          >
+            🔄 Reintentar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/api-service.js"></script>
+    <script src="js/autenticacion.js"></script>
+    <script src="js/dashboard-admin.js"></script>
+    <script src="js/dark-mode.js"></script>
+  </body>
+</html>

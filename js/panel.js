@@ -229,8 +229,8 @@ async function verMetricas(projectId) {
             <p>${metricas.metricas.precision}%</p>
           </div>
           <div class="metric-card">
-            <h4>💰 Costo</h4>
-            <p>$${metricas.metricas.costo}</p>
+            <h4>⚡ Consumo Energético</h4>
+            <p>${metricas.metricas.consumo_energetico_kwh.toFixed(8)} kWh</p>
           </div>
           <div class="metric-card">
             <h4>✅ Detecciones Correctas</h4>

@@ -203,3 +203,123 @@
   color: white !important;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
+
+/* Dashboard específico - soporte completo modo oscuro */
+
+/* Dashboard container y header */
+[data-theme="dark"] .dashboard-container {
+  background: #1a1a2e !important;
+}
+
+[data-theme="dark"] .dashboard-header {
+  background: #2c3e50 !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3) !important;
+}
+
+[data-theme="dark"] .dashboard-header h1,
+[data-theme="dark"] .dashboard-header p {
+  color: #ecf0f1 !important;
+}
+
+/* Chart cards */
+[data-theme="dark"] .chart-card {
+  background: #2c3e50 !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3) !important;
+}
+
+[data-theme="dark"] .chart-card h3 {
+  color: #ecf0f1 !important;
+}
+
+/* Activity list */
+[data-theme="dark"] .activity-list {
+  background: #2c3e50 !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3) !important;
+}
+
+[data-theme="dark"] .activity-list h3 {
+  color: #ecf0f1 !important;
+}
+
+[data-theme="dark"] .activity-item {
+  background: #34495e !important;
+  border-left-color: #3498db !important;
+}
+
+[data-theme="dark"] .activity-item .time {
+  color: #95a5a6 !important;
+}
+
+[data-theme="dark"] .activity-item .description {
+  color: #ecf0f1 !important;
+}
+
+/* Timestamp */
+[data-theme="dark"] .timestamp {
+  color: #95a5a6 !important;
+}
+
+/* Botones del dashboard */
+[data-theme="dark"] .refresh-btn {
+  background: #3498db !important;
+}
+
+[data-theme="dark"] .refresh-btn:hover {
+  background: #2980b9 !important;
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3) !important;
+}
+
+[data-theme="dark"] .btn-back {
+  background: #7f8c8d !important;
+}
+
+[data-theme="dark"] .btn-back:hover {
+  background: #646f70 !important;
+}
+
+/* Error message */
+[data-theme="dark"] .error-message {
+  background: #5a1a1a !important;
+  color: #fc8181 !important;
+  border-left-color: #9b2c2c !important;
+}
+
+/* Loading spinner */
+[data-theme="dark"] .spinner {
+  border-color: rgba(255, 255, 255, 0.1);
+  border-left-color: #3498db !important;
+}
+
+/* Métricas cards - mantener gradientes vibrantes */
+[data-theme="dark"] .metric-card {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4) !important;
+}
+
+[data-theme="dark"] .metric-card:hover {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5) !important;
+}
+
+[data-theme="dark"] .metric-card .icon,
+[data-theme="dark"] .metric-card .value,
+[data-theme="dark"] .metric-card .label,
+[data-theme="dark"] .metric-card .sublabel {
+  color: white !important;
+}
+
+/* Health indicators - mantener colores originales */
+[data-theme="dark"] .health-indicator.healthy {
+  background: #28a745 !important;
+}
+
+[data-theme="dark"] .health-indicator.warning {
+  background: #ffc107 !important;
+}
+
+[data-theme="dark"] .health-indicator.critical {
+  background: #dc3545 !important;
+}
+
+/* Chart.js - estilos para gráficos en modo oscuro */
+[data-theme="dark"] canvas {
+  filter: brightness(1.1);
+}

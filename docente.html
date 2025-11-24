@@ -473,6 +473,12 @@
         <button onclick="window.location.href='docente.html'" class="btn panel">
           🏠 Inicio
         </button>
+        <button
+          onclick="window.location.href='dashboard-admin.html'"
+          class="btn panel"
+        >
+          📊 Dashboard
+        </button>
         <button onclick="window.location.href='privacy.html'" class="btn panel">
           🔒 Privacidad
         </button>
@@ -821,13 +827,15 @@
           // data viene como lista de objetos {id, correo, nombre_completo, fecha_creacion}
           createdStudents = data.map((s) => ({
             email: s.correo,
-            username: s.correo.split('@')[0],
+            username: s.correo.split("@")[0],
             full_name: s.nombre_completo,
-            created_at: s.fecha_creacion ? new Date(s.fecha_creacion).toLocaleString('es-ES') : ''
+            created_at: s.fecha_creacion
+              ? new Date(s.fecha_creacion).toLocaleString("es-ES")
+              : "",
           }));
           updateCreationHistory();
         } catch (error) {
-          console.error('No se pudo cargar el historial de creación:', error);
+          console.error("No se pudo cargar el historial de creación:", error);
           // Si viene 401, el controlador de api-service ya redirige, aquí solo silenciosamente no mostramos nada
         }
       }
@@ -931,7 +939,10 @@
           document.getElementById("total-analysis").textContent = "0";
         } catch (e) {
           // Si los elementos no existen o hay algún error, lo ignoramos silenciosamente
-          console.debug('No se pudieron actualizar las estadísticas del dashboard:', e);
+          console.debug(
+            "No se pudieron actualizar las estadísticas del dashboard:",
+            e
+          );
         }
       }
 

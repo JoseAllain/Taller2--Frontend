@@ -454,7 +454,7 @@ async function cargarMetricas(proyectoId) {
                 <span>⏱️ ${m.tiempo_analisis}s</span>
                 <span>🔍 ${m.vulnerabilidades_detectadas} vuln.</span>
                 <span>🎯 ${m.precision}%</span>
-                <span>💰 $${m.costo}</span>
+                <span>⚡ ${m.consumo_energetico_kwh.toFixed(8)} kWh</span>
               </div>
             </div>
           `).join('')}

@@ -1,0 +1,275 @@
+/* Dashboard Admin CSS - Estilos personalizados para el panel de métricas */
+
+/* Animación de spinner para loading */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Modo Oscuro para Dashboard */
+[data-theme="dark"] .dashboard-container {
+    background: #1a1a2e !important;
+}
+
+[data-theme="dark"] .dashboard-header {
+    background: #2c3e50 !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3) !important;
+}
+
+[data-theme="dark"] .dashboard-header h1,
+[data-theme="dark"] .dashboard-header p {
+    color: #ecf0f1 !important;
+}
+
+[data-theme="dark"] .chart-card {
+    background: #2c3e50 !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3) !important;
+}
+
+[data-theme="dark"] .chart-card h3 {
+    color: #ecf0f1 !important;
+}
+
+[data-theme="dark"] .activity-list {
+    background: #2c3e50 !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3) !important;
+}
+
+[data-theme="dark"] .activity-list h3 {
+    color: #ecf0f1 !important;
+}
+
+[data-theme="dark"] .activity-item {
+    background: #34495e !important;
+    border-left-color: #3498db !important;
+}
+
+[data-theme="dark"] .activity-item .time {
+    color: #95a5a6 !important;
+}
+
+[data-theme="dark"] .activity-item .description {
+    color: #ecf0f1 !important;
+}
+
+[data-theme="dark"] .timestamp {
+    color: #95a5a6 !important;
+}
+
+[data-theme="dark"] .error-message {
+    background: #5a1a1a !important;
+    color: #fc8181 !important;
+    border-left-color: #9b2c2c !important;
+}
+
+/* Scrollbar personalizada para modo oscuro */
+[data-theme="dark"] .activity-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+[data-theme="dark"] .activity-list::-webkit-scrollbar-track {
+    background: #34495e;
+}
+
+[data-theme="dark"] .activity-list::-webkit-scrollbar-thumb {
+    background: #667eea;
+    border-radius: 4px;
+}
+
+[data-theme="dark"] .activity-list::-webkit-scrollbar-thumb:hover {
+    background: #5568d3;
+}
+
+/* Animaciones suaves para tarjetas */
+.metric-card {
+    animation: fadeInUp 0.5s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Efecto de pulso para métricas importantes */
+.metric-card:hover .value {
+    animation: pulse 0.5s ease;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+/* Botones con transiciones suaves */
+.refresh-btn,
+.btn-back {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.refresh-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Loading state con overlay */
+#loading-state {
+    backdrop-filter: blur(5px);
+}
+
+/* Charts responsivos */
+@media (max-width: 768px) {
+    .chart-container {
+        height: 250px !important;
+    }
+    
+    .metric-card .value {
+        font-size: 2em;
+    }
+    
+    .metric-card .icon {
+        font-size: 2em;
+    }
+}
+
+/* Indicadores de salud con animación */
+.health-indicator {
+    animation: blink 2s infinite;
+}
+
+@keyframes blink {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* Hover effects para activity items */
+.activity-item {
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.activity-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+    transition: left 0.5s;
+}
+
+.activity-item:hover::before {
+    left: 100%;
+}
+
+/* Tooltips para las tarjetas de métricas */
+.metric-card[data-tooltip]::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 0.85em;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.metric-card:hover[data-tooltip]::after {
+    opacity: 1;
+}
+
+/* Estilo para gráficos en loading */
+.chart-container.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 300px;
+}
+
+.chart-container.loading::after {
+    content: '⏳ Cargando gráfico...';
+    color: #667eea;
+    font-size: 1.1em;
+}
+
+/* Badge styles para contadores */
+.badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.75em;
+    font-weight: bold;
+    background: rgba(102, 126, 234, 0.2);
+    color: #667eea;
+    margin-left: 8px;
+}
+
+[data-theme="dark"] .badge {
+    background: rgba(102, 126, 234, 0.3);
+    color: #a8b8ff;
+}
+
+/* Empty state para actividad reciente */
+.empty-state {
+    text-align: center;
+    padding: 40px;
+    color: #999;
+}
+
+[data-theme="dark"] .empty-state {
+    color: #666;
+}
+
+.empty-state-icon {
+    font-size: 3em;
+    margin-bottom: 10px;
+    opacity: 0.3;
+}
+
+/* Print styles */
+@media print {
+    .navbar,
+    .header-actions,
+    .refresh-btn,
+    .btn-back {
+        display: none !important;
+    }
+    
+    .dashboard-container {
+        max-width: 100% !important;
+    }
+    
+    .metric-card {
+        break-inside: avoid;
+    }
+    
+    .chart-card {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+}

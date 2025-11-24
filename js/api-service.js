@@ -687,6 +687,94 @@ class ApiService {
         console.log("📊 Response status system-info:", response.status);
         return this.handleResponse(response);
     }
+
+    // ===== MÉTRICAS ADMINISTRATIVAS =====
+    /**
+     * Obtiene métricas completas del sistema para el dashboard administrativo
+     * Solo accesible para administradores
+     */
+    async getAdminMetrics() {
+        console.log("📊 Obteniendo métricas administrativas...");
+        const response = await fetch(`${this.baseURL}/admin/metrics`, {
+            method: "GET",
+            headers: this.getAuthHeaders()
+        });
+        return this.handleResponse(response);
+    }
+
+    /**
+     * Obtiene métricas específicas de usuarios
+     * @param {number} hours - Horas para considerar usuarios activos
+     */
+    async getUserMetrics(hours = 24) {
+        console.log(`📊 Obteniendo métricas de usuarios (${hours}h)...`);
+        const response = await fetch(`${this.baseURL}/admin/metrics/users?hours=${hours}`, {
+            method: "GET",
+            headers: this.getAuthHeaders()
+        });
+        return this.handleResponse(response);
+    }
+
+    /**
+     * Obtiene métricas específicas de proyectos
+     */
+    async getProjectMetrics() {
+        console.log("📊 Obteniendo métricas de proyectos...");
+        const response = await fetch(`${this.baseURL}/admin/metrics/projects`, {
+            method: "GET",
+            headers: this.getAuthHeaders()
+        });
+        return this.handleResponse(response);
+    }
+
+    /**
+     * Obtiene métricas de análisis realizados
+     */
+    async getAnalysisMetrics() {
+        console.log("📊 Obteniendo métricas de análisis...");
+        const response = await fetch(`${this.baseURL}/admin/metrics/analysis`, {
+            method: "GET",
+            headers: this.getAuthHeaders()
+        });
+        return this.handleResponse(response);
+    }
+
+    /**
+     * Obtiene métricas de vulnerabilidades detectadas
+     */
+    async getVulnerabilityMetrics() {
+        console.log("📊 Obteniendo métricas de vulnerabilidades...");
+        const response = await fetch(`${this.baseURL}/admin/metrics/vulnerabilities`, {
+            method: "GET",
+            headers: this.getAuthHeaders()
+        });
+        return this.handleResponse(response);
+    }
+
+    /**
+     * Obtiene métricas de salud del sistema
+     */
+    async getSystemHealthMetrics() {
+        console.log("📊 Obteniendo métricas de salud del sistema...");
+        const response = await fetch(`${this.baseURL}/admin/metrics/health`, {
+            method: "GET",
+            headers: this.getAuthHeaders()
+        });
+        return this.handleResponse(response);
+    }
+
+    /**
+     * Obtiene actividad reciente del sistema
+     * @param {number} limit - Número de actividades a mostrar
+     */
+    async getRecentActivity(limit = 10) {
+        console.log(`📊 Obteniendo actividad reciente (${limit} items)...`);
+        const response = await fetch(`${this.baseURL}/admin/metrics/activity?limit=${limit}`, {
+            method: "GET",
+            headers: this.getAuthHeaders()
+        });
+        return this.handleResponse(response);
+    }
 }
 
 // Exportar instancia global
