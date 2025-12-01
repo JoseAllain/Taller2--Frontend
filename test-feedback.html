@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prueba de Feedback</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/dark-mode-base.css" />
+    <script src="js/feedback.js" defer></script>
+    <script src="js/dark-mode.js" defer></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 50px;
+        background: var(--bg-color, #f5f5f5);
+        color: var(--text-color, #333);
+      }
+      .test-container {
+        max-width: 600px;
+        margin: 0 auto;
+        background: var(--card-bg, white);
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        color: var(--primary-color, #2563eb);
+        margin-bottom: 20px;
+      }
+      .btn-test {
+        background: var(--primary-color, #2563eb);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 16px;
+        margin: 10px 5px;
+        transition: all 0.3s;
+      }
+      .btn-test:hover {
+        background: var(--primary-hover, #1d4ed8);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+      }
+      .btn-secondary {
+        background: var(--secondary-color, #6b7280);
+      }
+      .btn-secondary:hover {
+        background: var(--secondary-hover, #4b5563);
+      }
+      .info-box {
+        background: var(--info-bg, #e3f2fd);
+        padding: 15px;
+        border-radius: 6px;
+        margin: 20px 0;
+        border-left: 4px solid var(--primary-color, #2563eb);
+      }
+      .info-box h3 {
+        margin-top: 0;
+        color: var(--primary-color, #2563eb);
+      }
+      .info-box ul {
+        margin: 10px 0;
+        padding-left: 20px;
+      }
+      .warning-box {
+        background: #fff3cd;
+        padding: 15px;
+        border-radius: 6px;
+        margin: 20px 0;
+        border-left: 4px solid #ffc107;
+      }
+      code {
+        background: rgba(0, 0, 0, 0.1);
+        padding: 2px 6px;
+        border-radius: 3px;
+        font-family: "Courier New", monospace;
+      }
+      [data-theme="dark"] .test-container {
+        background: #1e293b;
+      }
+      [data-theme="dark"] .info-box {
+        background: #334155;
+        color: #e2e8f0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="test-container">
+      <h1>🧪 Prueba del Sistema de Feedback</h1>
+
+      <div class="info-box">
+        <h3>ℹ️ Información</h3>
+        <p>
+          Esta página te permite probar el sistema de retroalimentación sin
+          necesidad de subir un proyecto completo.
+        </p>
+        <ul>
+          <li>Califica con estrellas (1-5)</li>
+          <li>Agrega comentarios opcionales</li>
+          <li>Los datos se envían al backend</li>
+        </ul>
+      </div>
+
+      <div class="warning-box">
+        <strong>⚠️ Nota:</strong> Debes estar autenticado para enviar feedback.
+        Asegúrate de haber iniciado sesión en <code>index.html</code> primero.
+      </div>
+
+      <h3>Acciones de Prueba:</h3>
+
+      <button class="btn-test" onclick="testFeedbackBasic()">
+        📊 Mostrar Encuesta Simple
+      </button>
+
+      <button class="btn-test" onclick="testFeedbackWithTime()">
+        ⏱️ Mostrar Encuesta con Tiempo
+      </button>
+
+      <button class="btn-test btn-secondary" onclick="testAutoShow()">
+        🤖 Simular Análisis Completo
+      </button>
+
+      <hr style="margin: 30px 0" />
+
+      <h3>Flujo Normal en Producción:</h3>
+      <ol>
+        <li>Usuario sube proyecto en <code>principal.html</code></li>
+        <li>Sistema analiza el código automáticamente</li>
+        <li>Al completar, muestra la encuesta (2 segundos después)</li>
+        <li>Usuario califica y/o comenta</li>
+        <li>Datos se guardan en la base de datos</li>
+      </ol>
+
+      <hr style="margin: 30px 0" />
+
+      <h3>Ver Resultados:</h3>
+      <p>Los administradores y docentes pueden ver las estadísticas en:</p>
+      <ul>
+        <li><code>GET /api/v1/feedback/estadisticas</code></li>
+        <li><code>GET /api/v1/feedback/promedios-por-tipo</code></li>
+        <li><code>GET /api/v1/feedback/recientes</code></li>
+      </ul>
+
+      <button class="btn-test" onclick="window.location.href='principal.html'">
+        🏠 Volver a Principal
+      </button>
+    </div>
+
+    <script>
+      // Verificar que el módulo de feedback esté cargado
+      if (typeof feedbackModule === "undefined") {
+        alert("❌ Error: El módulo de feedback no está cargado correctamente.");
+      }
+
+      // Función para probar feedback básico
+      function testFeedbackBasic() {
+        if (typeof feedbackModule === "undefined") {
+          alert("El módulo de feedback no está disponible.");
+          return;
+        }
+
+        // Mostrar la encuesta con un ID de proyecto de prueba
+        feedbackModule.showFeedbackSurvey(1); // ID de proyecto ficticio
+      }
+
+      // Función para probar feedback con tiempo de análisis
+      function testFeedbackWithTime() {
+        if (typeof feedbackModule === "undefined") {
+          alert("El módulo de feedback no está disponible.");
+          return;
+        }
+
+        // Mostrar la encuesta con tiempo de análisis simulado (15 segundos)
+        feedbackModule.showFeedbackSurvey(1, 15);
+      }
+
+      // Función para simular el flujo completo de análisis
+      function testAutoShow() {
+        if (typeof feedbackModule === "undefined") {
+          alert("El módulo de feedback no está disponible.");
+          return;
+        }
+
+        // Simular que comenzó el análisis
+        const analysisStartTime = Date.now();
+
+        // Mostrar mensaje de análisis
+        alert(
+          "🔍 Simulando análisis de proyecto...\n\nEn 3 segundos aparecerá la encuesta de feedback."
+        );
+
+        // Simular un análisis de 3 segundos
+        setTimeout(() => {
+          feedbackModule.autoShowAfterAnalysis(1, analysisStartTime);
+        }, 3000);
+      }
+
+      // Verificar autenticación al cargar
+      window.addEventListener("DOMContentLoaded", () => {
+        const token =
+          localStorage.getItem("access_token") || localStorage.getItem("token");
+        if (!token) {
+          const warningDiv = document.createElement("div");
+          warningDiv.style.cssText =
+            "position: fixed; top: 20px; right: 20px; background: #f59e0b; color: white; padding: 15px 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 9999;";
+          warningDiv.innerHTML =
+            '⚠️ No estás autenticado. <a href="index.html" style="color: white; text-decoration: underline;">Iniciar sesión</a>';
+          document.body.appendChild(warningDiv);
+        }
+      });
+    </script>
+  </body>
+</html>

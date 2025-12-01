@@ -10,6 +10,7 @@
     <script src="js/autenticacion.js" defer></script>
     <script src="js/principal.js" defer></script>
     <script src="js/dark-mode.js" defer></script>
+    <script src="js/feedback.js" defer></script>
   </head>
   <body>
     <div class="hero">
@@ -24,6 +25,15 @@
             onclick="window.location.href='privacy.html'"
           >
             🔒 Privacidad
+          </button>
+          <button
+            class="btn panel"
+            onclick="window.location.href='uso-sostenible.html'"
+          >
+            🌱 Uso Sostenible
+          </button>
+          <button class="btn panel" onclick="mostrarEncuestaFeedback()">
+            ⭐ Calificar Sistema
           </button>
           <button onclick="logout()" class="btn logout">Cerrar Sesión</button>
         </div>

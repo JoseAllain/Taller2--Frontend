@@ -488,6 +488,150 @@
         transition: background-color 0.3s ease, color 0.3s ease,
           border-color 0.3s ease;
       }
+
+      /* Estilos para el modal de datos JSON */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(5px);
+        animation: fadeIn 0.3s ease;
+      }
+
+      .modal-content {
+        background: var(--privacy-bg-primary);
+        margin: 3% auto;
+        padding: 0;
+        border: 2px solid var(--privacy-border);
+        border-radius: 15px;
+        width: 90%;
+        max-width: 900px;
+        max-height: 85vh;
+        box-shadow: 0 10px 40px var(--privacy-shadow);
+        animation: slideDown 0.3s ease;
+        overflow: hidden;
+      }
+
+      @keyframes slideDown {
+        from {
+          transform: translateY(-50px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      .modal-header {
+        background: linear-gradient(135deg, var(--privacy-accent), #0056b3);
+        padding: 20px 30px;
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .modal-header h2 {
+        margin: 0;
+        font-size: 1.5rem;
+      }
+
+      .close-modal {
+        color: white;
+        font-size: 32px;
+        font-weight: bold;
+        cursor: pointer;
+        background: none;
+        border: none;
+        padding: 0;
+        width: 35px;
+        height: 35px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+      }
+
+      .close-modal:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: rotate(90deg);
+      }
+
+      .modal-body {
+        padding: 30px;
+        max-height: calc(85vh - 140px);
+        overflow-y: auto;
+      }
+
+      .json-container {
+        background: var(--privacy-bg-secondary);
+        border: 2px solid var(--privacy-border);
+        border-radius: 10px;
+        padding: 20px;
+        overflow-x: auto;
+      }
+
+      .json-container pre {
+        margin: 0;
+        font-family: "Courier New", monospace;
+        font-size: 13px;
+        line-height: 1.6;
+        color: var(--privacy-text-primary);
+        white-space: pre-wrap;
+        word-wrap: break-word;
+      }
+
+      .btn-download {
+        background: var(--privacy-success);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 15px;
+        font-weight: 600;
+        margin-top: 20px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+      }
+
+      .btn-download:hover {
+        background: #218838;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(40, 167, 69, 0.4);
+      }
+
+      .btn-view-data {
+        background: var(--privacy-accent);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 600;
+        margin-top: 10px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+      }
+
+      .btn-view-data:hover {
+        background: var(--privacy-accent-hover);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 123, 255, 0.4);
+      }
     </style>
   </head>
   <body>
@@ -721,6 +865,30 @@ Solicito acceso a todos mis datos personales almacenados en el sistema, incluyen
       </div>
     </div>
 
+    <!-- Modal para mostrar datos JSON -->
+    <div id="jsonModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>📄 Tus Datos Personales</h2>
+          <button class="close-modal" onclick="closeJsonModal()">
+            &times;
+          </button>
+        </div>
+        <div class="modal-body">
+          <p style="color: var(--privacy-text-secondary); margin-bottom: 20px">
+            A continuación puedes ver todos tus datos personales almacenados en
+            el sistema en formato JSON:
+          </p>
+          <div class="json-container">
+            <pre id="jsonContent"></pre>
+          </div>
+          <button class="btn-download" onclick="downloadJson()">
+            💾 Descargar JSON
+          </button>
+        </div>
+      </div>
+    </div>
+
     <script src="js/dark-mode.js"></script>
     <script src="js/api-service.js"></script>
     <script src="js/autenticacion.js"></script>
@@ -890,6 +1058,14 @@ Solicito acceso a todos mis datos personales almacenados en el sistema, incluyen
                                         hour: "2-digit",
                                         minute: "2-digit",
                                       })}</p>`
+                                    : ""
+                                }
+                                ${
+                                  req.request_type === "access" &&
+                                  req.status === "completed"
+                                    ? `<button class="btn-view-data" onclick="viewRequestData(${req.id})">
+                                        📄 Ver Mis Datos en JSON
+                                       </button>`
                                     : ""
                                 }
                             </div>
@@ -1091,6 +1267,83 @@ Solicito acceso a todos mis datos personales almacenados en el sistema, incluyen
       function showErrorAlert(title, message) {
         alert(`${title}\n\n${message}`);
       }
+
+      // Variables globales para el modal
+      let currentJsonData = null;
+
+      // Función para ver los datos de una solicitud de acceso
+      async function viewRequestData(requestId) {
+        try {
+          const modal = document.getElementById("jsonModal");
+          const jsonContent = document.getElementById("jsonContent");
+
+          // Mostrar loading
+          jsonContent.textContent = "⏳ Cargando tus datos...";
+          modal.style.display = "block";
+
+          // Obtener los datos de la solicitud
+          const response = await apiService.getPrivacyRequestData(requestId);
+          currentJsonData = response.user_data;
+
+          // Mostrar JSON formateado
+          jsonContent.textContent = JSON.stringify(currentJsonData, null, 2);
+        } catch (error) {
+          console.error("Error al obtener datos:", error);
+          const jsonContent = document.getElementById("jsonContent");
+          jsonContent.textContent = `❌ Error al cargar los datos:\n\n${error.message}`;
+        }
+      }
+
+      // Función para cerrar el modal
+      function closeJsonModal() {
+        const modal = document.getElementById("jsonModal");
+        modal.style.display = "none";
+        currentJsonData = null;
+      }
+
+      // Función para descargar el JSON
+      function downloadJson() {
+        if (!currentJsonData) {
+          alert("❌ No hay datos disponibles para descargar");
+          return;
+        }
+
+        try {
+          // Crear el contenido del archivo
+          const jsonString = JSON.stringify(currentJsonData, null, 2);
+          const blob = new Blob([jsonString], { type: "application/json" });
+
+          // Crear un enlace temporal para descargar
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = `mis-datos-personales-${
+            new Date().toISOString().split("T")[0]
+          }.json`;
+          document.body.appendChild(a);
+          a.click();
+
+          // Limpiar
+          window.URL.revokeObjectURL(url);
+          document.body.removeChild(a);
+
+          showSuccessAlert(
+            "✅ Descarga Exitosa",
+            "Tus datos han sido descargados en formato JSON."
+          );
+        } catch (error) {
+          console.error("Error al descargar:", error);
+          showErrorAlert("❌ Error al Descargar", error.message);
+        }
+      }
+
+      // Cerrar modal al hacer clic fuera de él
+      window.onclick = function (event) {
+        const modal = document.getElementById("jsonModal");
+        if (event.target === modal) {
+          closeJsonModal();
+        }
+      };
     </script>
   </body>
 </html>

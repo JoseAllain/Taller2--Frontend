@@ -1,6 +1,7 @@
-// reporte.js
+// reporte-docente.js - Lógica específica para docentes viendo reportes de estudiantes
 let resultadosProyecto = {};
 let currentProjectData = {};
+let studentInfo = {};
 let loadedComponents = {
   summary: false,
   metrics: false,
@@ -8,31 +9,22 @@ let loadedComponents = {
 };
 
 window.onload = async () => {
-  // Intentar obtener el ID del proyecto desde la URL primero, luego desde localStorage
+  // Obtener el ID del proyecto SOLO desde la URL (los docentes siempre vienen desde docente.html)
   const urlParams = new URLSearchParams(window.location.search);
-  const proyectoIdFromUrl = urlParams.get('id');
-  const proyectoIdFromStorage = localStorage.getItem("proyecto_id");
-  
-  // Priorizar el ID de la URL si existe, sino usar localStorage
-  const proyectoId = proyectoIdFromUrl || proyectoIdFromStorage;
-  
-  // Si se obtuvo de la URL, actualizar localStorage para mantener consistencia
-  if (proyectoIdFromUrl) {
-    localStorage.setItem("proyecto_id", proyectoIdFromUrl);
-  }
+  const proyectoId = urlParams.get('id');
+  const estudianteId = urlParams.get('student_id'); // Parámetro opcional para identificar al estudiante
   
   const token = localStorage.getItem("token");
   
-  console.log("🔍 Iniciando carga de reporte...");
-  console.log("📁 Proyecto ID desde URL:", proyectoIdFromUrl);
-  console.log("📁 Proyecto ID desde localStorage:", proyectoIdFromStorage);
-  console.log("📁 Proyecto ID final:", proyectoId);
+  console.log("🔍 [DOCENTE] Iniciando carga de reporte...");
+  console.log("📁 Proyecto ID:", proyectoId);
+  console.log("👨‍🎓 Estudiante ID:", estudianteId);
   console.log("🔑 Token disponible:", !!token);
   
   if (!proyectoId) {
     console.error("❌ No hay proyecto seleccionado");
     alert("No hay proyecto seleccionado");
-    window.location.href = "panel.html";
+    window.location.href = "docente.html";
     return;
   }
   
@@ -52,11 +44,27 @@ window.onload = async () => {
     }
     console.log("✅ Backend conectado correctamente");
 
-    // Verificar autenticación
-    console.log("🔍 Verificando autenticación...");
+    // Verificar autenticación y rol de docente
+    console.log("🔍 Verificando autenticación y rol...");
     try {
       const userInfo = await apiService.getCurrentUser();
-      console.log("✅ Usuario autenticado:", userInfo.correo);
+      console.log("✅ Usuario autenticado:", userInfo);
+      console.log("✅ Email:", userInfo.correo || userInfo.email);
+      console.log("✅ Rol (rol):", userInfo.rol);
+      console.log("✅ Rol (role):", userInfo.role);
+      
+      // Verificar rol - puede venir como 'rol' o 'role' del backend
+      const userRole = (userInfo.rol || userInfo.role || '').toLowerCase();
+      console.log("✅ Rol normalizado:", userRole);
+      
+      if (userRole !== 'docente') {
+        console.error("❌ Usuario no es docente, rol actual:", userRole);
+        alert("Esta página es solo para docentes. Serás redirigido.");
+        window.location.href = "reporte.html?id=" + proyectoId;
+        return;
+      }
+      
+      console.log("✅ Verificación de rol exitosa - Usuario es docente");
     } catch (authError) {
       console.error("❌ Error de autenticación:", authError);
       if (authError.message === "Sesión expirada") {
@@ -65,9 +73,26 @@ window.onload = async () => {
       throw new Error("Error de autenticación: " + authError.message);
     }
     
-    // Obtener los resultados del análisis directamente (el análisis ya se ejecutó)
-    console.log("📊 Obteniendo resultados del análisis...");
-    const resultsData = await apiService.getAnalysisResults(proyectoId);
+    // Obtener información del proyecto primero
+    console.log("📊 Obteniendo información del proyecto...");
+    const projectInfo = await apiService.getProject(proyectoId);
+    console.log("✅ Información del proyecto obtenida:", projectInfo);
+    
+    // Obtener información del estudiante dueño del proyecto
+    if (projectInfo.usuario_id) {
+      try {
+        const studentData = await apiService.getUserById(projectInfo.usuario_id);
+        studentInfo = studentData;
+        mostrarInfoEstudiante(studentData, projectInfo);
+      } catch (error) {
+        console.warn("⚠️ No se pudo obtener información del estudiante:", error);
+        mostrarInfoEstudiante({ correo: "Estudiante desconocido" }, projectInfo);
+      }
+    }
+    
+    // Obtener los resultados del análisis como docente
+    console.log("📊 Obteniendo resultados del análisis como docente...");
+    const resultsData = await apiService.getAnalysisResultsAsTeacher(proyectoId);
     console.log("✅ Resultados obtenidos:", resultsData);
     
     if (!resultsData) {
@@ -129,6 +154,8 @@ window.onload = async () => {
       errorMessage = "No se puede conectar al servidor. Verifica que el backend esté ejecutándose en el puerto 8000.";
     } else if (err.message === "Sesión expirada") {
       return; // Ya se maneja automáticamente
+    } else if (err.message.includes("No tienes permisos")) {
+      errorMessage = "No tienes permisos para ver este proyecto. Solo puedes ver proyectos de tus estudiantes.";
     } else {
       errorMessage = err.message;
     }
@@ -139,12 +166,10 @@ window.onload = async () => {
     console.log("- Token disponible:", !!localStorage.getItem("token"));
     console.log("- Base URL:", apiService.baseURL);
     
-    // No redirigir automáticamente para poder ver el error
+    // Redirigir a docente.html después de un error
     setTimeout(() => {
-      if (confirm("¿Deseas volver al panel de proyectos?")) {
-        window.location.href = "panel.html";
-      }
-    }, 1000);
+      window.location.href = "docente.html";
+    }, 2000);
   }
 };
 
@@ -178,6 +203,21 @@ function transformarResultados(data) {
 
   console.log("✅ Resultados transformados:", Object.keys(resultados).length, "archivos");
   return resultados;
+}
+
+function mostrarInfoEstudiante(studentData, projectInfo) {
+  const container = document.getElementById("info-estudiante");
+  if (!container) return;
+  
+  container.innerHTML = `
+    <div class="student-info-card" style="background: var(--card-bg, #f8f9fa); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+      <h3 style="margin: 0 0 10px 0; color: var(--text-color, #2c3e50);">👨‍🎓 Información del Estudiante</h3>
+      <p style="margin: 5px 0;"><strong>📧 Email:</strong> ${studentData.correo || 'N/A'}</p>
+      <p style="margin: 5px 0;"><strong>📁 Proyecto:</strong> ${projectInfo.name || projectInfo.nombre || 'N/A'}</p>
+      <p style="margin: 5px 0;"><strong>📅 Creado:</strong> ${projectInfo.created_at ? new Date(projectInfo.created_at).toLocaleDateString('es-ES') : 'N/A'}</p>
+      ${projectInfo.description ? `<p style="margin: 5px 0;"><strong>📝 Descripción:</strong> ${projectInfo.description}</p>` : ''}
+    </div>
+  `;
 }
 
 function mostrarArchivos(listaArchivos) {
@@ -225,71 +265,7 @@ async function cargarDetalles(nombreArchivo) {
   Prism.highlightElement(document.getElementById("codigo"));
 }
 
-/* async function mostrarGrafo() {
-  const proyectoId = localStorage.getItem("proyecto_id");
-  const iframe = document.getElementById("grafo-frame");
-
-  try {
-    const res = await fetch(`${backendURL}/grafo/${proyectoId}`, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-    });
-
-    if (!res.ok) {
-      iframe.srcdoc = "<p>Error al cargar el grafo.</p>";
-      return;
-    }
-
-    const html = await res.text();
-    const blob = new Blob([html], { type: "text/html" });
-    iframe.src = URL.createObjectURL(blob);
-  } catch (error) {
-    iframe.srcdoc = "<p>Error de red al mostrar el grafo.</p>";
-  }
-} */
-
-
-
-/* async function descargarPDF() {
-  const proyectoId = localStorage.getItem("proyecto_id");
-  const res = await fetch(`${backendURL}/report/download/${proyectoId}`, {
-    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-  });
-
-  if (res.status === 401) return redirigirLogin();
-  if (!res.ok) return alert("No hay reporte disponible");
-
-  const blob = await res.blob();
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "reporte_vulnerabilidades.pdf";
-  a.click();
-}
-
-
-async function mostrarHeatmap() {
-  const proyectoId = localStorage.getItem("proyecto_id");
-  const iframe = document.getElementById("heatmap-frame");
-
-  try {
-    const res = await fetch(`${backendURL}/interactive-heatmap/${proyectoId}`, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-    });
-
-    if (res.status === 401) return redirigirLogin();
-    if (!res.ok) throw new Error("No se pudo obtener el heatmap");
-
-    const html = await res.text();
-    const blob = new Blob([html], { type: "text/html" });
-    iframe.src = URL.createObjectURL(blob);
-  } catch (error) {
-    console.error("Error al cargar el heatmap:", error);
-    iframe.srcdoc = "<p>Error al cargar el heatmap interactivo.</p>";
-  }
-} */
-
-// Funciones auxiliares para mostrar información del proyecto
-
+// Funciones de lazy loading
 async function cargarComponenteLazy(componentName, proyectoId) {
   if (loadedComponents[componentName]) {
     console.log(`⏭️ Componente ${componentName} ya fue cargado`);
@@ -324,7 +300,6 @@ async function cargarComponenteLazy(componentName, proyectoId) {
   }
 }
 
-// Mostrar indicadores de carga para componentes
 function mostrarIndicadorCarga(componentName) {
   const containerId = `${componentName}-container`;
   const container = document.getElementById(containerId);
@@ -339,7 +314,6 @@ function mostrarIndicadorCarga(componentName) {
   `;
 }
 
-// Mostrar error de carga
 function mostrarErrorCarga(componentName, errorMessage) {
   const containerId = `${componentName}-container`;
   const container = document.getElementById(containerId);
@@ -355,7 +329,6 @@ function mostrarErrorCarga(componentName, errorMessage) {
   `;
 }
 
-// Obtener nombre legible del componente
 function getNombreComponente(componentName) {
   const nombres = {
     'summary': 'resumen',
@@ -365,9 +338,9 @@ function getNombreComponente(componentName) {
   return nombres[componentName] || componentName;
 }
 
-// Función para reintentar la carga de un componente
 async function reintentar(componentName) {
-  const proyectoId = localStorage.getItem("proyecto_id");
+  const urlParams = new URLSearchParams(window.location.search);
+  const proyectoId = urlParams.get('id');
   loadedComponents[componentName] = false;
   await cargarComponenteLazy(componentName, proyectoId);
 }
@@ -515,60 +488,13 @@ function descargarGrafo(url) {
   a.click();
 }
 
-async function generarReporte() {
-  const proyectoId = localStorage.getItem("proyecto_id");
-  
-  try {
-    const reporte = await apiService.getReport(proyectoId);
-    
-    // Mostrar modal con el reporte
-    const modalContent = `
-      <div class="report-modal">
-        <h3>📄 Reporte Completo</h3>
-        <div class="report-content">
-          <pre>${JSON.stringify(reporte, null, 2)}</pre>
-        </div>
-        <div class="modal-actions">
-          <button onclick="descargarReporteJSON()" class="btn-download">📥 Descargar JSON</button>
-          <button onclick="closeModal()" class="btn-close">Cerrar</button>
-        </div>
-      </div>
-    `;
-    
-    showModal(modalContent);
-  } catch (error) {
-    alert("Error al generar reporte: " + error.message);
-  }
-}
-
-function descargarReporteJSON() {
-  const proyectoId = localStorage.getItem("proyecto_id");
-  const reportData = {
-    proyecto_id: proyectoId,
-    fecha_generacion: new Date().toISOString(),
-    resultados: resultadosProyecto,
-    proyecto_data: currentProjectData
-  };
-  
-  const blob = new Blob([JSON.stringify(reportData, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `reporte_proyecto_${proyectoId}.json`;
-  a.click();
-  
-  closeModal();
-}
-
-// Funciones auxiliares para mostrar información cuando no hay resultados
 function mostrarSinResultados() {
   document.getElementById("codigo").textContent = "// No se detectaron archivos con vulnerabilidades.";
   document.getElementById("report-container").innerHTML = `
     <div class="no-results">
       <h3>✅ ¡Excelente!</h3>
-      <p>No se detectaron vulnerabilidades de inyección SQL en tu proyecto.</p>
-      <p>Tu código parece estar seguro contra este tipo de ataques.</p>
+      <p>No se detectaron vulnerabilidades de inyección SQL en este proyecto.</p>
+      <p>El código parece estar seguro contra este tipo de ataques.</p>
     </div>
   `;
   
@@ -578,109 +504,8 @@ function mostrarSinResultados() {
   }
 }
 
-// Funciones de modal
-function showModal(content) {
-  // Crear overlay del modal
-  const modalOverlay = document.createElement('div');
-  modalOverlay.id = 'modal-overlay';
-  modalOverlay.className = 'modal-overlay';
-  modalOverlay.style.cssText = `
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    z-index: 1000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  `;
-  
-  // Crear contenedor del modal
-  const modalContainer = document.createElement('div');
-  modalContainer.className = 'modal-container';
-  modalContainer.style.cssText = `
-    background: white;
-    border-radius: 8px;
-    max-width: 90%;
-    max-height: 90%;
-    overflow-y: auto;
-    padding: 20px;
-    position: relative;
-  `;
-  
-  modalContainer.innerHTML = content;
-  modalOverlay.appendChild(modalContainer);
-  document.body.appendChild(modalOverlay);
-  
-  // Cerrar modal al hacer click fuera
-  modalOverlay.addEventListener('click', (e) => {
-    if (e.target === modalOverlay) {
-      closeModal();
-    }
-  });
-}
-
-function closeModal() {
-  const modal = document.getElementById('modal-overlay');
-  if (modal) {
-    modal.remove();
-  }
-}
-
-// Función para mostrar la encuesta de feedback desde el navbar
-function mostrarEncuestaFeedback() {
-  if (typeof feedbackModule === 'undefined') {
-    alert('El módulo de feedback no está disponible en este momento.');
-    return;
-  }
-  
-  // Obtener el ID del proyecto actual
-  const proyectoId = localStorage.getItem('proyecto_id');
-  
-  if (!proyectoId) {
-    alert('No hay proyecto seleccionado para calificar.');
-    return;
-  }
-  
-  // Mostrar la encuesta para el proyecto actual
-  feedbackModule.showFeedbackSurvey(parseInt(proyectoId), null);
-}
-
-// Función para regresar a la página anterior correctamente
-async function goBack() {
-  // Verificar si hay un referrer (de dónde viene el usuario)
-  const referrer = document.referrer;
-  
-  // Si viene de docente.html o panel-estudiante.html, usar history.back()
-  if (referrer.includes('docente.html') || referrer.includes('panel-estudiante.html')) {
-    console.log('🔙 Regresando a:', referrer);
-    window.history.back();
-    return;
-  }
-  
-  // Si hay historial suficiente, intentar regresar
-  if (window.history.length > 2) {
-    console.log('🔙 Usando history.back()');
-    window.history.back();
-    return;
-  }
-  
-  // Si no hay historial claro, redirigir según el rol del usuario
-  try {
-    const user = await apiService.getCurrentUser();
-    if (user.rol === 'docente') {
-      console.log('🔙 Regresando a docente.html (rol: docente)');
-      window.location.href = 'docente.html';
-    } else {
-      console.log('🔙 Regresando a principal.html (rol: estudiante)');
-      window.location.href = 'principal.html';
-    }
-  } catch (error) {
-    console.error('❌ Error al obtener usuario:', error);
-    // Por defecto, ir a principal.html
-    console.log('🔙 Regresando a principal.html (por defecto)');
-    window.location.href = 'principal.html';
-  }
+// Función para regresar al panel de docente
+function goBack() {
+  console.log('🔙 Regresando a docente.html');
+  window.location.href = 'docente.html';
 }

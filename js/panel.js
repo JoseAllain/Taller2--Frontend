@@ -283,6 +283,20 @@ function logout() {
   window.location.href = "index.html";
 }
 
+// Función para mostrar la encuesta de feedback desde el navbar
+function mostrarEncuestaFeedback() {
+  if (typeof feedbackModule === 'undefined') {
+    alert('El módulo de feedback no está disponible en este momento.');
+    return;
+  }
+  
+  // Obtener el ID del último proyecto analizado si existe
+  const ultimoProyectoId = localStorage.getItem('proyecto_id') || null;
+  
+  // Mostrar la encuesta con tipo "general" para feedback del sistema
+  feedbackModule.showFeedbackSurvey(ultimoProyectoId, null);
+}
+
 // Utilidades para modales
 function showModal(content) {
   const modal = document.createElement("div");

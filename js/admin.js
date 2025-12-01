@@ -52,9 +52,6 @@ function showTab(tabName) {
         case 'privacy-requests':
             loadPrivacyRequests();
             break;
-        case 'data-treatment':
-            loadDataTreatments();
-            break;
         case 'dpa-management':
             loadDpaManagement();
             break;
@@ -107,18 +104,14 @@ function loadRoleSpecificActions() {
                 <button class="btn-admin" onclick="showCreateUserModal('docente')">
                     ➕ Crear Docente
                 </button>
-                <button class="btn-admin" onclick="showCreateUserModal('estudiante')">
-                    ➕ Crear Estudiante
-                </button>
-                <!-- 'Gestionar Roles' y 'Exportar Reporte' removidos -->
             </div>
                     <div class="alert-item">
                         <p><strong>Como Administrador puedes:</strong></p>
                         <ul>
-                            <li> Crear usuarios con rol Docente</li>
-                            <li> Crear usuarios con rol Estudiante</li>
-                            <li> Activar/Desactivar usuarios</li>
-                            <li> Ver todos los proyectos y reportes</li>
+                            <li>✅ Crear usuarios con rol Docente</li>
+                            <li>✅ Activar/Desactivar usuarios</li>
+                            <li>📊 Ver estadísticas del sistema</li>
+                            <li>🔒 Gestionar solicitudes de privacidad</li>
                         </ul>
                     </div>
         `;
@@ -126,9 +119,6 @@ function loadRoleSpecificActions() {
         actionsContainer.innerHTML = `
             <h4>👨‍🏫 Acciones de Docente</h4>
             <div style="display: flex; gap: 10px; flex-wrap: wrap; margin: 15px 0;">
-                <button class="btn-admin" onclick="showCreateUserModal('estudiante')">
-                    ➕ Crear Estudiante
-                </button>
                 <button class="btn-admin" onclick="showStudentsManagement()">
                     👨‍🎓 Gestionar Estudiantes
                 </button>
@@ -139,10 +129,10 @@ function loadRoleSpecificActions() {
             <div class="alert-item">
                 <p><strong>Como Docente puedes:</strong></p>
                 <ul>
-                    <li>✅ Crear usuarios con rol Estudiante</li>
+                    <li>✅ Ver y gestionar tus estudiantes</li>
                     <li>✅ Ver reportes de todos los estudiantes</li>
-                    <li>✅ Activar/Desactivar estudiantes</li>
-                    <li>❌ No puedes crear docentes o administradores</li>
+                    <li>✅ Activar/Desactivar tus estudiantes</li>
+                    <li>❌ No puedes crear nuevos usuarios</li>
                     <li>❌ No puedes cambiar roles de otros usuarios</li>
                 </ul>
             </div>
@@ -246,9 +236,6 @@ function getUserActionButtons(user) {
     
     let buttons = [];
     
-    // Botón de ver proyectos (todos pueden ver)
-    buttons.push(`<button class="btn-admin" onclick="viewUserProjects('${user.email}')">📂 Ver Proyectos</button>`);
-    
     // Acciones específicas según el rol actual
     if (currentUserRole === 'administrador') {
         // Los administradores pueden hacer todo
@@ -298,10 +285,9 @@ function showCreateUserModal(defaultRole = '') {
     let roleOptions = [];
     if (currentUserRole === 'administrador') {
         roleOptions = [
-            { value: 'estudiante', text: '👨‍🎓 Estudiante' },
             { value: 'docente', text: '👨‍🏫 Docente' }
         ];
-        modalTitle.textContent = '⚙️ Crear Nuevo Usuario (Administrador)';
+        modalTitle.textContent = '⚙️ Crear Nuevo Docente (Administrador)';
     } else if (currentUserRole === 'docente') {
         roleOptions = [
             { value: 'estudiante', text: '👨‍🎓 Estudiante' }
@@ -377,11 +363,6 @@ async function activateUser(userId, userEmail) {
     } catch (error) {
         alert('❌ Error: ' + error.message);
     }
-}
-
-function viewUserProjects(userEmail) {
-    // Esta funcionalidad requiere un endpoint específico en el backend
-    alert(`📂 Ver proyectos de ${userEmail} - Funcionalidad disponible`);
 }
 
 function showStudentsManagement() {
@@ -627,165 +608,13 @@ async function rejectRequest(requestId, requestType) {
     }
 }
 
-// ===== TRATAMIENTO DE DATOS (PRF4) =====
-async function loadDataTreatments() {
-    try {
-        const [treatments, complianceReport] = await Promise.all([
-            apiService.getTreatmentRegistries(),
-            apiService.getComplianceReport()
-        ]);
-        
-        // Mostrar reporte de cumplimiento
-        const complianceContainer = document.getElementById('gdpr-compliance');
-        const report = complianceReport.prf4_compliance_report;
-        
-        complianceContainer.innerHTML = `
-            <div class="compliance-items">
-                <div class="compliance-item">
-                    <div class="icon">📋</div>
-                    <h4>${report.total_active_treatments}</h4>
-                    <p>Tratamientos Activos</p>
-                </div>
-                <div class="compliance-item">
-                    <div class="icon">✅</div>
-                    <h4>${report.compliance_status}</h4>
-                    <p>Estado GDPR</p>
-                </div>
-                <div class="compliance-item">
-                    <div class="icon">📊</div>
-                    <h4>${report.legal_bases_used.length}</h4>
-                    <p>Bases Legales</p>
-                </div>
-                <div class="compliance-item">
-                    <div class="icon">🔒</div>
-                    <h4>${report.data_categories_tracked.length}</h4>
-                    <p>Categorías de Datos</p>
-                </div>
-            </div>
-        `;
-        
-        // Mostrar lista de tratamientos
-        const treatmentsContainer = document.getElementById('treatments-list');
-        
-        if (treatments.total_treatments === 0) {
-            treatmentsContainer.innerHTML = '<p>No hay tratamientos registrados</p>';
-            return;
-        }
-        
-        treatmentsContainer.innerHTML = `
-            <h4>📋 Tratamientos Registrados (${treatments.total_treatments})</h4>
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nombre</th>
-                        <th>Base Legal</th>
-                        <th>Período Retención</th>
-                        <th>Estado</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${treatments.treatments.map(t => `
-                        <tr>
-                            <td>${t.id}</td>
-                            <td>${t.treatment_name}</td>
-                            <td>${t.legal_basis}</td>
-                            <td>${t.retention_period}</td>
-                            <td><span class="status-badge status-${t.active ? 'active' : 'expired'}">${t.active ? 'Activo' : 'Inactivo'}</span></td>
-                            <td>
-                                <button class="btn-admin" onclick="viewTreatment(${t.id})">👁️ Ver</button>
-                                <button class="btn-admin warning" onclick="editTreatment(${t.id})">✏️ Editar</button>
-                                ${t.active ? 
-                                    `<button class="btn-admin danger" onclick="deactivateTreatment(${t.id})">🚫 Desactivar</button>` :
-                                    `<button class="btn-admin" onclick="activateTreatment(${t.id})">✅ Activar</button>`
-                                }
-                            </td>
-                        </tr>
-                    `).join('')}
-                </tbody>
-            </table>
-        `;
-        
-    } catch (error) {
-        console.error("Error cargando tratamientos:", error);
-        document.getElementById('treatments-list').innerHTML = 
-            '<p style="color: red;">Error al cargar tratamientos de datos</p>';
-    }
-}
-
-async function showCreateTreatmentForm() {
-    document.getElementById('create-treatment-form').style.display = 'block';
-}
-
-function hideCreateTreatmentForm() {
-    document.getElementById('create-treatment-form').style.display = 'none';
-}
-
-async function createTreatment(event) {
-    event.preventDefault();
-    const formData = new FormData(event.target);
-    
-    const treatmentData = {
-        treatment_name: formData.get('treatment_name'),
-        treatment_description: formData.get('treatment_description'),
-        data_categories: formData.get('data_categories').split(',').map(s => s.trim()),
-        data_fields: formData.get('data_fields'),
-        processing_purpose: formData.get('processing_purpose'),
-        processing_activities: formData.get('processing_activities'),
-        legal_basis: formData.get('legal_basis'),
-        retention_period: formData.get('retention_period'),
-        security_measures: formData.get('security_measures')
-    };
-    
-    try {
-        await apiService.createTreatmentRegistry(treatmentData);
-        alert('✅ Tratamiento creado exitosamente');
-        hideCreateTreatmentForm();
-        event.target.reset();
-        loadDataTreatments();
-    } catch (error) {
-        alert('❌ Error: ' + error.message);
-    }
-}
-
 // ===== GESTIÓN DPA (PRF5) =====
 async function loadDpaManagement() {
     try {
-        const [dashboard, alerts, dpas] = await Promise.all([
-            apiService.getDpaDashboard(),
+        const [alerts, dpas] = await Promise.all([
             apiService.getDpaAlerts(),
             apiService.getDpas()
         ]);
-        
-        // Mostrar dashboard DPA
-        const dashboardContainer = document.getElementById('dpa-dashboard');
-        const summary = dashboard.prf5_dpa_dashboard.summary;
-        
-        dashboardContainer.innerHTML = `
-            <div class="dashboard-grid">
-                <div class="dashboard-card">
-                    <h3>☁️ DPA Activos</h3>
-                    <div class="number">${summary.total_active_dpas}</div>
-                    <p>Acuerdos vigentes</p>
-                </div>
-                <div class="dashboard-card">
-                    <h3>⚠️ Por Vencer</h3>
-                    <div class="number">${summary.dpas_expiring_soon}</div>
-                    <p>Próximos 30 días</p>
-                </div>
-                <div class="dashboard-card">
-                    <h3>❌ Expirados</h3>
-                    <div class="number">${summary.expired_dpas}</div>
-                    <p>Requieren renovación</p>
-                </div>
-                <div class="dashboard-card">
-                    <h3>🌍 Ubicaciones</h3>
-                    <div class="number">${Object.keys(summary.data_locations).length}</div>
-                    <p>Regiones cubiertas</p>
-                </div>
-            </div>
-        `;
         
         // Mostrar alertas
         const alertsContainer = document.getElementById('dpa-alerts');
@@ -804,14 +633,12 @@ async function loadDpaManagement() {
                     <div class="alert-item ${dpa.priority === 'critical' ? 'critical' : ''}">
                         <h5>⏰ ${dpa.provider} (${dpa.cloud_provider})</h5>
                         <p>Vence en ${dpa.days_remaining} días - ${dpa.expiry_date}</p>
-                        <button class="btn-admin warning" onclick="renewDpa(${dpa.id})">🔄 Renovar</button>
                     </div>
                 `).join('')}
                 ${alerts.expired_dpas.map(dpa => `
                     <div class="alert-item critical">
                         <h5>❌ ${dpa.provider} (${dpa.cloud_provider})</h5>
                         <p>Expirado hace ${dpa.days_overdue} días</p>
-                        <button class="btn-admin danger" onclick="renewDpa(${dpa.id})">⚡ Renovar Urgente</button>
                     </div>
                 `).join('')}
             `;
@@ -834,7 +661,6 @@ async function loadDpaManagement() {
                         <th>Proveedor</th>
                         <th>Cloud Provider</th>
                         <th>Ubicación</th>
-                        <th>Estado</th>
                         <th>Vencimiento</th>
                         <th>Acciones</th>
                     </tr>
@@ -846,12 +672,9 @@ async function loadDpaManagement() {
                             <td>${dpa.provider_name}</td>
                             <td>${dpa.cloud_provider}</td>
                             <td>${dpa.data_location}</td>
-                            <td><span class="status-badge status-${dpa.status.toLowerCase()}">${dpa.status}</span></td>
                             <td>${new Date(dpa.expiry_date).toLocaleDateString()}</td>
                             <td>
                                 <button class="btn-admin" onclick="viewDpa(${dpa.id})">👁️ Ver</button>
-                                <button class="btn-admin warning" onclick="editDpa(${dpa.id})">✏️ Editar</button>
-                                <button class="btn-admin danger" onclick="deactivateDpa(${dpa.id})">🚫 Desactivar</button>
                             </td>
                         </tr>
                     `).join('')}
@@ -861,8 +684,7 @@ async function loadDpaManagement() {
         
     } catch (error) {
         console.error("Error cargando DPA:", error);
-        document.getElementById('dpa-dashboard').innerHTML = 
-            '<p style="color: red;">Error al cargar gestión DPA</p>';
+        alert('Error al cargar gestión DPA: ' + error.message);
     }
 }
 
@@ -1051,25 +873,7 @@ async function loadSystemHealth() {
 // ===== CARGAR ENUMS =====
 async function loadEnums() {
     try {
-        const [treatmentEnums, dpaEnums] = await Promise.all([
-            apiService.getDataTreatmentEnums(),
-            apiService.getDpaEnums()
-        ]);
-        
-        // Cargar enums para tratamientos
-        const legalBasisSelect = document.getElementById('legal-basis-select');
-        if (legalBasisSelect) {
-            legalBasisSelect.innerHTML = treatmentEnums.legal_bases.map(lb => 
-                `<option value="${lb.value}">${lb.name}</option>`
-            ).join('');
-        }
-        
-        const retentionSelect = document.getElementById('retention-period-select');
-        if (retentionSelect) {
-            retentionSelect.innerHTML = treatmentEnums.retention_periods.map(rp => 
-                `<option value="${rp.value}">${rp.name}</option>`
-            ).join('');
-        }
+        const dpaEnums = await apiService.getDpaEnums();
         
         // Cargar enums para DPA
         const cloudProviderSelect = document.getElementById('cloud-provider-select');
@@ -1092,34 +896,270 @@ async function loadEnums() {
 }
 
 // ===== FUNCIONES DE ACCIÓN =====
-function viewTreatment(id) {
-    alert(`Ver detalles del tratamiento ${id} - Funcionalidad disponible`);
-}
+async function viewDpa(id) {
+    try {
+        const response = await apiService.getDpaDetails(id);
+        const dpa = response.dpa;
+        const compliance = response.compliance_analysis;
+        
+        // Manejar data_categories_processed (puede ser array o string)
+        let categoriesText = '';
+        if (Array.isArray(dpa.data_categories_processed)) {
+            categoriesText = dpa.data_categories_processed.join(', ');
+        } else if (typeof dpa.data_categories_processed === 'string') {
+            categoriesText = dpa.data_categories_processed;
+        } else {
+            categoriesText = 'N/A';
+        }
+        
+        // Crear modal para mostrar detalles con mejor diseño
+        const modal = document.createElement('div');
+        modal.className = 'dpa-modal-overlay';
+        modal.style.cssText = `
+            display: flex;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(3px);
+        `;
+        
+        // Determinar el color del badge según el estado
+        const statusColors = {
+            'active': { bg: '#27ae60', text: 'Activo' },
+            'expired': { bg: '#e74c3c', text: 'Expirado' },
+            'suspended': { bg: '#f39c12', text: 'Suspendido' },
+            'terminated': { bg: '#95a5a6', text: 'Terminado' }
+        };
+        const statusInfo = statusColors[dpa.status] || { bg: '#95a5a6', text: dpa.status };
+        
+        modal.innerHTML = `
+            <div class="dpa-modal-content" style="
+                background: white;
+                padding: 0;
+                border-radius: 15px;
+                max-width: 900px;
+                width: 90%;
+                max-height: 85vh;
+                overflow: hidden;
+                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+                animation: slideDown 0.3s ease-out;
+            ">
+                <div class="dpa-modal-header" style="
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    color: white;
+                    padding: 25px 30px;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                ">
+                    <h3 style="margin: 0; font-size: 24px; font-weight: 600;">
+                        📄 Detalles del DPA
+                    </h3>
+                    <button onclick="this.closest('.dpa-modal-overlay').remove()" style="
+                        background: rgba(255, 255, 255, 0.2);
+                        border: none;
+                        color: white;
+                        width: 35px;
+                        height: 35px;
+                        border-radius: 50%;
+                        cursor: pointer;
+                        font-size: 20px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        transition: background 0.3s;
+                    " onmouseover="this.style.background='rgba(255,255,255,0.3)'" 
+                       onmouseout="this.style.background='rgba(255,255,255,0.2)'">
+                        ×
+                    </button>
+                </div>
+                
+                <div class="dpa-modal-body" style="
+                    padding: 30px;
+                    overflow-y: auto;
+                    max-height: calc(85vh - 150px);
+                ">
+                    <div style="display: grid; gap: 20px;">
+                        <!-- Información Principal -->
+                        <div class="dpa-section">
+                            <h4 style="color: #667eea; margin-bottom: 15px; font-size: 18px; border-bottom: 2px solid #667eea; padding-bottom: 8px;">
+                                ℹ️ Información General
+                            </h4>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+                                <div class="dpa-field">
+                                    <span class="dpa-label">Título:</span>
+                                    <span class="dpa-value">${dpa.dpa_title}</span>
+                                </div>
+                                <div class="dpa-field">
+                                    <span class="dpa-label">Proveedor:</span>
+                                    <span class="dpa-value">${dpa.provider_name}</span>
+                                </div>
+                                <div class="dpa-field">
+                                    <span class="dpa-label">Cloud Provider:</span>
+                                    <span class="dpa-value">${dpa.cloud_provider}</span>
+                                </div>
+                                <div class="dpa-field">
+                                    <span class="dpa-label">Ubicación de Datos:</span>
+                                    <span class="dpa-value">${dpa.data_location}</span>
+                                </div>
+                                ${dpa.contract_number ? `
+                                <div class="dpa-field">
+                                    <span class="dpa-label">N° de Contrato:</span>
+                                    <span class="dpa-value">${dpa.contract_number}</span>
+                                </div>
+                                ` : ''}
+                            </div>
+                            <div style="margin-top: 15px;">
+                                <div class="dpa-field" style="display: block;">
+                                    <span class="dpa-label">Descripción:</span>
+                                    <p class="dpa-value" style="margin: 8px 0 0 0; line-height: 1.6;">${dpa.dpa_description}</p>
+                                </div>
+                            </div>
+                        </div>
 
-function editTreatment(id) {
-    alert(`Editar tratamiento ${id} - Funcionalidad disponible`);
-}
+                        <!-- Fechas -->
+                        <div class="dpa-section">
+                            <h4 style="color: #667eea; margin-bottom: 15px; font-size: 18px; border-bottom: 2px solid #667eea; padding-bottom: 8px;">
+                                📅 Fechas Importantes
+                            </h4>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                                <div class="dpa-field">
+                                    <span class="dpa-label">Fecha Firma:</span>
+                                    <span class="dpa-value">${new Date(dpa.signed_date).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                                </div>
+                                <div class="dpa-field">
+                                    <span class="dpa-label">Fecha Efectiva:</span>
+                                    <span class="dpa-value">${new Date(dpa.effective_date).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                                </div>
+                                <div class="dpa-field">
+                                    <span class="dpa-label">Fecha Expiración:</span>
+                                    <span class="dpa-value">${new Date(dpa.expiry_date).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                                </div>
+                                <div class="dpa-field">
+                                    <span class="dpa-label">Días hasta expiración:</span>
+                                    <span class="dpa-value" style="
+                                        ${compliance.is_expiring_soon ? 'color: #e74c3c; font-weight: 600;' : ''}
+                                    ">
+                                        ${compliance.days_until_expiry} días 
+                                        ${compliance.is_expiring_soon ? '⚠️' : '✅'}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
 
-function deactivateTreatment(id) {
-    if (confirm('¿Estás seguro de que quieres desactivar este tratamiento?')) {
-        alert(`Desactivar tratamiento ${id} - Funcionalidad disponible`);
+                        <!-- Datos y Procesamiento -->
+                        <div class="dpa-section">
+                            <h4 style="color: #667eea; margin-bottom: 15px; font-size: 18px; border-bottom: 2px solid #667eea; padding-bottom: 8px;">
+                                🔐 Datos y Procesamiento
+                            </h4>
+                            <div style="display: grid; gap: 15px;">
+                                <div class="dpa-field" style="display: block;">
+                                    <span class="dpa-label">Categorías de Datos Procesados:</span>
+                                    <p class="dpa-value" style="margin: 8px 0 0 0; line-height: 1.6;">${categoriesText}</p>
+                                </div>
+                                <div class="dpa-field" style="display: block;">
+                                    <span class="dpa-label">Propósitos de Procesamiento:</span>
+                                    <p class="dpa-value" style="margin: 8px 0 0 0; line-height: 1.6;">${dpa.processing_purposes}</p>
+                                </div>
+                                <div class="dpa-field" style="display: block;">
+                                    <span class="dpa-label">Medidas de Seguridad:</span>
+                                    <p class="dpa-value" style="margin: 8px 0 0 0; line-height: 1.6;">${dpa.security_measures}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="dpa-modal-footer" style="
+                    padding: 20px 30px;
+                    background: #f8f9fa;
+                    display: flex;
+                    justify-content: flex-end;
+                    border-top: 1px solid #e9ecef;
+                ">
+                    <button class="btn-admin" onclick="this.closest('.dpa-modal-overlay').remove()" style="
+                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                        color: white;
+                        border: none;
+                        padding: 12px 30px;
+                        border-radius: 8px;
+                        cursor: pointer;
+                        font-weight: 600;
+                        transition: transform 0.2s, box-shadow 0.2s;
+                    " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 5px 15px rgba(102, 126, 234, 0.4)'" 
+                       onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                        Cerrar
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        // Agregar estilos inline para dark mode
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideDown {
+                from {
+                    opacity: 0;
+                    transform: translateY(-50px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+            
+            .dpa-field {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .dpa-label {
+                font-weight: 600;
+                color: #555;
+                font-size: 13px;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+            
+            .dpa-value {
+                color: #2c3e50;
+                font-size: 15px;
+            }
+            
+            /* Dark Mode Support */
+            [data-theme="dark"] .dpa-modal-content {
+                background: #2c3e50 !important;
+            }
+            
+            [data-theme="dark"] .dpa-modal-footer {
+                background: #34495e !important;
+                border-top-color: #2c3e50 !important;
+            }
+            
+            [data-theme="dark"] .dpa-label {
+                color: #bdc3c7 !important;
+            }
+            
+            [data-theme="dark"] .dpa-value {
+                color: #ecf0f1 !important;
+            }
+            
+            [data-theme="dark"] .dpa-section h4 {
+                color: #3498db !important;
+                border-bottom-color: #3498db !important;
+            }
+        `;
+        document.head.appendChild(style);
+        
+        document.body.appendChild(modal);
+    } catch (error) {
+        alert('❌ Error al obtener detalles del DPA: ' + error.message);
     }
-}
-
-function viewDpa(id) {
-    alert(`Ver detalles del DPA ${id} - Funcionalidad disponible`);
-}
-
-function editDpa(id) {
-    alert(`Editar DPA ${id} - Funcionalidad disponible`);
-}
-
-function deactivateDpa(id) {
-    if (confirm('¿Estás seguro de que quieres desactivar este DPA?')) {
-        alert(`Desactivar DPA ${id} - Funcionalidad disponible`);
-    }
-}
-
-function renewDpa(id) {
-    alert(`Renovar DPA ${id} - Funcionalidad disponible`);
 }

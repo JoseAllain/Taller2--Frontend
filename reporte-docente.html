@@ -3,10 +3,45 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Reporte de Vulnerabilidades</title>
+    <title>Reporte de Vulnerabilidades - Docente</title>
     <link rel="stylesheet" href="css/repo_styles.css" />
     <link rel="stylesheet" href="css/dark-mode-base.css" />
     <link rel="stylesheet" href="css/dark-mode-reporte.css" />
+    <style>
+      /* Estilos específicos para la vista de docente */
+      .info-estudiante {
+        margin-bottom: 20px;
+      }
+
+      .student-info-card {
+        animation: fadeIn 0.5s ease-in;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .student-info-card h3 {
+        border-bottom: 2px solid var(--primary-color, #667eea);
+        padding-bottom: 8px;
+      }
+
+      .student-info-card p {
+        font-size: 0.9rem;
+        line-height: 1.6;
+      }
+
+      .student-info-card strong {
+        color: var(--primary-color, #667eea);
+      }
+    </style>
 
     <!-- Prism.js para resaltado -->
     <link
@@ -23,33 +58,20 @@
     <!-- JS funciones -->
     <script src="js/api-service.js" defer></script>
     <script src="js/autenticacion.js" defer></script>
-    <script src="js/reporte.js" defer></script>
+    <script src="js/reporte-docente.js" defer></script>
     <script src="js/dark-mode.js" defer></script>
-    <script src="js/feedback.js" defer></script>
   </head>
   <body>
     <div class="hero">
-      <nav class="navbar">
-        <span class="navbar-title">BlackQuery</span>
-        <div class="navbar-actions">
-          <button onclick="window.location.href='principal.html'" class="btn panel">
-            🏠 Inicio
+      <div class="navbar">
+        <span class="navbar-title">BlackQuery - Vista Docente</span>
+        <div style="display: flex; gap: 10px">
+          <button onclick="window.history.back()" class="btn panel">
+            ⬅️ Atrás
           </button>
-          <button onclick="window.location.href='panel.html'" class="btn panel">
-            📊 Panel
-          </button>
-          <button onclick="window.location.href='privacy.html'" class="btn panel">
-            🔒 Privacidad
-          </button>
-          <button onclick="window.location.href='uso-sostenible.html'" class="btn panel">
-            🌱 Uso Sostenible
-          </button>
-          <button onclick="mostrarEncuestaFeedback()" class="btn panel">
-            ⭐ Calificar Análisis
-          </button>
-          <button onclick="logout()" class="btn logout">Cerrar Sesión</button>
+          <button onclick="logout()" class="btn logout">Cerrar sesión</button>
         </div>
-      </nav>
+      </div>
 
       <div class="container">
         <!-- Sidebar -->
@@ -57,12 +79,13 @@
         <!-- Contenido principal -->
         <div class="content">
           <div class="sidebar">
+            <div class="info-estudiante" id="info-estudiante">
+              <!-- Información del estudiante se cargará aquí -->
+            </div>
             <div class="menu">
               <ul id="lista-archivos">
                 <!-- Lista dinámica -->
               </ul>
-              <!-- <button onclick="mostrarGrafo()">Mostrar Flujo de Código</button> -->
-              <!--<button onclick="descargarPDF()">Descargar Reporte</button>-->
             </div>
           </div>
           <div class="code-viewer">
@@ -80,26 +103,8 @@
             <h2>Vulnerabilidades encontradas</h2>
             <div id="report-container"></div>
           </div>
-        
         </div>
       </div>
     </div>
-
-    <!--<section>
-      <h2>Mapa de Calor por Línea</h2>
-      <iframe id="heatmap-frame" width="100%" height="800" style="border: 1px solid #ccc;"></iframe>
-
-    </section>-->
-    <!--<section>
-      <h2>Flujo de Código</h2>
-      <iframe
-        class="grafo"
-        id="grafo-frame"
-        src=""
-        width="100%"
-        height="600"
-        style="border: 1px solid #ccc"
-      ></iframe>
   </body>
-    </section>-->
 </html>

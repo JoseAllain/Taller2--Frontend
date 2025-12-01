@@ -356,7 +356,7 @@ async function subirZip(event) {
     // Verificar conectividad del backend primero
     console.log("🔍 Verificando conectividad del backend...");
     try {
-      const healthCheck = await fetch("https://sqli-ecologico-backend.onrender.com/health");
+      const healthCheck = await fetch("http://localhost:8000/health");
       if (!healthCheck.ok) {
         throw new Error("El backend no está respondiendo.");
       }
@@ -406,12 +406,13 @@ async function subirZip(event) {
       // Verificar si el análisis fue exitoso
       if (analysisResult.project_id || analysisResult.vulnerabilities) {
         console.log("✅ Redirigiendo a reporte.html");
-        alert("✅ Proyecto subido y analizado exitosamente");
+        alert("✅ Proyecto subido y analizado exitosamente.");
+        
         window.location.href = "reporte.html";
       } else {
         // Si el análisis no fue exitoso, aún redirigir pero mostrar mensaje
         console.warn("⚠️ El análisis se completó con advertencias");
-        alert("✅ Proyecto subido. El análisis se completó pero puede no haber encontrado vulnerabilidades.");
+        alert("✅ Proyecto subido.");
         window.location.href = "reporte.html";
       }
       
@@ -522,4 +523,18 @@ function loadDynamicNavigation(userRole) {
   // Insertar navegación antes del botón de logout
   const logoutBtn = navbar.querySelector('.logout');
   navbar.insertBefore(navLinksContainer, logoutBtn);
+}
+
+// Función para mostrar la encuesta de feedback desde el navbar
+function mostrarEncuestaFeedback() {
+  if (typeof feedbackModule === 'undefined') {
+    alert('El módulo de feedback no está disponible en este momento.');
+    return;
+  }
+  
+  // Obtener el ID del último proyecto analizado si existe
+  const ultimoProyectoId = localStorage.getItem('proyecto_id') || null;
+  
+  // Mostrar la encuesta con tipo "general" para feedback del sistema
+  feedbackModule.showFeedbackSurvey(ultimoProyectoId, null);
 }

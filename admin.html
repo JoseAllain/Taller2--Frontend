@@ -521,9 +521,6 @@
           <button class="tab" onclick="showTab('privacy-requests')">
             🔒 Solicitudes de Privacidad
           </button>
-          <button class="tab" onclick="showTab('data-treatment')">
-            📋 Tratamiento de Datos
-          </button>
           <button class="tab" onclick="showTab('dpa-management')">
             ☁️ Gestión DPA
           </button>
@@ -664,115 +661,9 @@
           </div>
         </div>
 
-        <!-- Contenido de Tratamiento de Datos -->
-        <div id="data-treatment" class="tab-content">
-          <h3>📋 Registro de Tratamiento de Datos (PRF4)</h3>
-
-          <div class="compliance-summary">
-            <h4>📊 Estado de Cumplimiento GDPR</h4>
-            <div id="gdpr-compliance">
-              <!-- Se carga dinámicamente -->
-            </div>
-          </div>
-
-          <button class="btn-admin" onclick="showCreateTreatmentForm()">
-            ➕ Nuevo Tratamiento
-          </button>
-
-          <div
-            id="create-treatment-form"
-            style="
-              display: none;
-              background: #f8f9fa;
-              padding: 20px;
-              border-radius: 8px;
-              margin: 15px 0;
-            "
-          >
-            <h4>Crear Nuevo Registro de Tratamiento</h4>
-            <form onsubmit="createTreatment(event)">
-              <div class="form-grid">
-                <div class="form-group">
-                  <label>Nombre del Tratamiento:</label>
-                  <input type="text" name="treatment_name" required />
-                </div>
-                <div class="form-group">
-                  <label>Base Legal:</label>
-                  <select name="legal_basis" id="legal-basis-select" required>
-                    <!-- Se carga dinámicamente -->
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label>Período de Retención:</label>
-                  <select
-                    name="retention_period"
-                    id="retention-period-select"
-                    required
-                  >
-                    <!-- Se carga dinámicamente -->
-                  </select>
-                </div>
-              </div>
-              <div class="form-group">
-                <label>Descripción:</label>
-                <textarea name="treatment_description" required></textarea>
-              </div>
-              <div class="form-group">
-                <label>Categorías de Datos (separadas por comas):</label>
-                <input
-                  type="text"
-                  name="data_categories"
-                  placeholder="personales,contacto,analíticos"
-                  required
-                />
-              </div>
-              <div class="form-group">
-                <label>Campos de Datos:</label>
-                <textarea
-                  name="data_fields"
-                  placeholder="email, nombre, IP, cookies..."
-                  required
-                ></textarea>
-              </div>
-              <div class="form-group">
-                <label>Propósito del Procesamiento:</label>
-                <textarea name="processing_purpose" required></textarea>
-              </div>
-              <div class="form-group">
-                <label>Actividades de Procesamiento:</label>
-                <textarea name="processing_activities" required></textarea>
-              </div>
-              <div class="form-group">
-                <label>Medidas de Seguridad:</label>
-                <textarea
-                  name="security_measures"
-                  placeholder="Cifrado, control de acceso, logs de auditoría..."
-                  required
-                ></textarea>
-              </div>
-              <button type="submit" class="btn-admin">Crear Tratamiento</button>
-              <button
-                type="button"
-                class="btn-admin danger"
-                onclick="hideCreateTreatmentForm()"
-              >
-                Cancelar
-              </button>
-            </form>
-          </div>
-
-          <div id="treatments-list">
-            <!-- Se carga dinámicamente -->
-          </div>
-        </div>
-
         <!-- Contenido de Gestión DPA -->
         <div id="dpa-management" class="tab-content">
-          <h3>☁️ Gestión de Data Processing Agreements (PRF5)</h3>
-
-          <div id="dpa-dashboard">
-            <!-- Se carga dinámicamente -->
-          </div>
+          <h3>☁️ Gestión de Data Processing Agreements</h3>
 
           <div id="dpa-alerts" class="alert-list">
             <!-- Se carga dinámicamente -->

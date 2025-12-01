@@ -45,3 +45,83 @@
 .panel-container, .project-card, .btn-ver {
   transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease !important;
 }
+/* Sección de información del usuario */
+[data-theme="dark"] .user-section {
+  background: #2c3e50 !important;
+  color: #ecf0f1 !important;
+}
+
+[data-theme="dark"] .user-card h3 {
+  color: #ecf0f1 !important;
+}
+
+/* Estado vacío */
+[data-theme="dark"] .empty-state {
+  background: #2c3e50 !important;
+  color: #ecf0f1 !important;
+}
+
+/* Modal */
+[data-theme="dark"] .modal-overlay {
+  background: rgba(0, 0, 0, 0.7) !important;
+}
+
+[data-theme="dark"] .modal-content {
+  background: #2c3e50 !important;
+  color: #ecf0f1 !important;
+}
+
+/* Tarjetas de métricas */
+[data-theme="dark"] .metric-card {
+  background: #34495e !important;
+  color: #ecf0f1 !important;
+}
+
+[data-theme="dark"] .metric-card h4 {
+  color: #ecf0f1 !important;
+}
+
+[data-theme="dark"] .metric-card p {
+  color: #3498db !important;
+}
+
+/* Botones */
+[data-theme="dark"] .btn-metrics,
+[data-theme="dark"] .btn-analyze {
+  background: #34495e !important;
+  color: #ecf0f1 !important;
+}
+
+[data-theme="dark"] .btn-metrics:hover,
+[data-theme="dark"] .btn-analyze:hover {
+  background: #2c3e50 !important;
+}
+
+[data-theme="dark"] .btn-close {
+  background: #34495e !important;
+  color: #ecf0f1 !important;
+}
+
+[data-theme="dark"] .btn-close:hover {
+  background: #2c3e50 !important;
+}
+
+[data-theme="dark"] .btn-primary {
+  background: #3498db !important;
+  color: white !important;
+}
+
+[data-theme="dark"] .btn-primary:hover {
+  background: #2980b9 !important;
+}
+
+/* Badges */
+[data-theme="dark"] .badge.admin {
+  background: #27ae60 !important;
+  color: white !important;
+}
+
+[data-theme="dark"] .badge.user {
+  background: #3498db !important;
+  color: white !important;
+}

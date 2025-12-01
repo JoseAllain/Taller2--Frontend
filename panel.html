@@ -11,6 +11,7 @@
     <script defer src="js/api-service.js"></script>
     <script defer src="js/panel.js"></script>
     <script defer src="js/dark-mode.js"></script>
+    <script defer src="js/feedback.js"></script>
   </head>
   <body>
     <nav class="navbar">
@@ -27,6 +28,15 @@
         </button>
         <button onclick="window.location.href='privacy.html'" class="btn panel">
           🔒 Privacidad
+        </button>
+        <button
+          onclick="window.location.href='uso-sostenible.html'"
+          class="btn panel"
+        >
+          🌱 Uso Sostenible
+        </button>
+        <button onclick="mostrarEncuestaFeedback()" class="btn panel">
+          ⭐ Calificar Sistema
         </button>
         <button onclick="logout()" class="btn logout">Cerrar Sesión</button>
       </div>

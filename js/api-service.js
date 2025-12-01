@@ -4,7 +4,7 @@
  */
 class ApiService {
     constructor() {
-        this.baseURL = "https://sqli-ecologico-backend.onrender.com/api/v1";
+        this.baseURL = "http://localhost:8000/api/v1";
         this.updateToken();
     }
 
@@ -108,6 +108,14 @@ class ApiService {
                 target_email: targetEmail, 
                 new_role: newRole 
             })
+        });
+        return this.handleResponse(response);
+    }
+
+    async getUserById(userId) {
+        console.log("👤 Obteniendo información del usuario ID:", userId);
+        const response = await fetch(`${this.baseURL}/auth/users/${userId}`, {
+            headers: this.getAuthHeaders()
         });
         return this.handleResponse(response);
     }
@@ -219,6 +227,24 @@ class ApiService {
         return this.handleResponse(response);
     }
 
+    async getUserProjectsById(userId) {
+        console.log("📂 Obteniendo proyectos del usuario ID:", userId);
+        const response = await fetch(`${this.baseURL}/upload/projects/user/${userId}`, {
+            headers: this.getAuthHeaders()
+        });
+        console.log("📂 Response status de proyectos por usuario:", response.status);
+        return this.handleResponse(response);
+    }
+
+    async getProject(projectId) {
+        console.log("📂 Obteniendo información del proyecto ID:", projectId);
+        const response = await fetch(`${this.baseURL}/upload/projects/${projectId}`, {
+            headers: this.getAuthHeaders()
+        });
+        console.log("📂 Response status de proyecto:", response.status);
+        return this.handleResponse(response);
+    }
+
     // ===== ANÁLISIS =====
     async analyzeProject(projectId) {
         console.log("🔍 Iniciando análisis del proyecto:", projectId);
@@ -235,6 +261,15 @@ class ApiService {
             headers: this.getAuthHeaders()
         });
         console.log("📊 Response status de resultados:", response.status);
+        return this.handleResponse(response);
+    }
+
+    async getAnalysisResultsAsTeacher(projectId) {
+        console.log("📊 [DOCENTE] Obteniendo resultados del análisis:", projectId);
+        const response = await fetch(`${this.baseURL}/analysis/${projectId}/results`, {
+            headers: this.getAuthHeaders()
+        });
+        console.log("📊 [DOCENTE] Response status de resultados:", response.status);
         return this.handleResponse(response);
     }
 
@@ -418,14 +453,32 @@ class ApiService {
         return this.handleResponse(response);
     }
 
+    async getDpaDetails(dpaId) {
+        const response = await fetch(`${this.baseURL}/dpa-admin/dpa/${dpaId}`, {
+            headers: this.getAuthHeaders()
+        });
+        return this.handleResponse(response);
+    }
+
+    async changeDpaStatus(dpaId, newStatus) {
+        const response = await fetch(`${this.baseURL}/dpa-admin/dpa/${dpaId}/status?new_status=${newStatus}`, {
+            method: "PATCH",
+            headers: {
+                ...this.getAuthHeaders(),
+                'Accept': 'application/json'
+            }
+        });
+        return this.handleResponse(response);
+    }
+
     // ===== SALUD DEL SISTEMA =====
     async getHealthStatus() {
-        const response = await fetch("https://sqli-ecologico-backend.onrender.com/health");
+        const response = await fetch("http://localhost:8000/health");
         return this.handleResponse(response);
     }
 
     async getDetailedHealthStatus() {
-        const response = await fetch("https://sqli-ecologico-backend.onrender.com/health/detailed");
+        const response = await fetch("http://localhost:8000/health/detailed");
         return this.handleResponse(response);
     }
 
@@ -445,6 +498,15 @@ class ApiService {
             headers: this.getAuthHeaders()
         });
         console.log("👥 Response status usuarios por rol:", response.status);
+        return this.handleResponse(response);
+    }
+
+    async getTeacherStudents() {
+        console.log("👨‍🎓 Obteniendo estudiantes del docente");
+        const response = await fetch(`${this.baseURL}/auth/teacher/students`, {
+            headers: this.getAuthHeaders()
+        });
+        console.log("👨‍🎓 Response status estudiantes:", response.status);
         return this.handleResponse(response);
     }
 
@@ -584,6 +646,18 @@ class ApiService {
             headers: this.getAuthHeaders()
         });
         console.log("🔍 Response status detalles solicitud:", response.status);
+        return this.handleResponse(response);
+    }
+
+    /**
+     * Obtener los datos del usuario (JSON) de una solicitud de acceso completada
+     */
+    async getPrivacyRequestData(requestId) {
+        console.log("📄 Obteniendo datos de solicitud de acceso:", requestId);
+        const response = await fetch(`${this.baseURL}/privacy/request/${requestId}/data`, {
+            headers: this.getAuthHeaders()
+        });
+        console.log("📄 Response status datos de solicitud:", response.status);
         return this.handleResponse(response);
     }
 

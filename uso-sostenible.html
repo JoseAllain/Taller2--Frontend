@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Uso Sostenible del Sistema - BlackQuery</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/dark-mode-base.css" />
+    <link rel="stylesheet" href="css/dark-mode-principal.css" />
+    <script src="js/autenticacion.js" defer></script>
+    <script src="js/dark-mode.js" defer></script>
+    <style>
+      /* Override hero class to allow scrolling */
+      html {
+        scroll-behavior: auto !important;
+        overflow-y: auto !important;
+        height: auto !important;
+      }
+
+      body {
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        height: auto !important;
+        min-height: 100vh !important;
+      }
+
+      /* Eliminar fondo animado */
+      .hero {
+        background: var(--bg-color, #f8f9fa) !important;
+        animation: none !important;
+        overflow: visible !important;
+        height: auto !important;
+        min-height: 100vh !important;
+      }
+
+      .hero::before,
+      .hero::after {
+        display: none !important;
+      }
+
+      .sustainability-container {
+        max-width: 1000px;
+        margin: 50px auto;
+        padding: 30px;
+        background: var(--card-bg, white);
+        border-radius: 15px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .sustainability-header {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+
+      .sustainability-header h1 {
+        color: var(--primary-color, #2563eb);
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+      }
+
+      .sustainability-header .icon {
+        font-size: 3rem;
+      }
+
+      .sustainability-header p {
+        color: var(--text-secondary, #666);
+        font-size: 1.1rem;
+        line-height: 1.6;
+      }
+
+      .tips-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 25px;
+        margin-bottom: 40px;
+      }
+
+      .tip-card {
+        background: var(--tip-bg, #f8f9fa);
+        border-left: 5px solid var(--primary-color, #2563eb);
+        border-radius: 10px;
+        padding: 25px;
+        transition: all 0.3s ease;
+      }
+
+      .tip-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      .tip-card.energy {
+        border-left-color: #10b981;
+      }
+
+      .tip-card.performance {
+        border-left-color: #f59e0b;
+      }
+
+      .tip-card.resources {
+        border-left-color: #8b5cf6;
+      }
+
+      .tip-card.security {
+        border-left-color: #ef4444;
+      }
+
+      .tip-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 15px;
+      }
+
+      .tip-icon {
+        font-size: 2.5rem;
+        min-width: 50px;
+      }
+
+      .tip-title {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--text-color, #333);
+      }
+
+      .tip-content {
+        color: var(--text-secondary, #555);
+        line-height: 1.8;
+        font-size: 1rem;
+      }
+
+      .tip-list {
+        list-style: none;
+        padding: 0;
+        margin: 15px 0 0 0;
+      }
+
+      .tip-list li {
+        padding: 8px 0 8px 30px;
+        position: relative;
+      }
+
+      .tip-list li::before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: var(--primary-color, #2563eb);
+        font-weight: bold;
+        font-size: 1.2rem;
+      }
+
+      .impact-section {
+        background: linear-gradient(
+          135deg,
+          var(--gradient-start, #10b981) 0%,
+          var(--gradient-end, #059669) 100%
+        );
+        color: white;
+        padding: 30px;
+        border-radius: 15px;
+        margin-bottom: 30px;
+        text-align: center;
+      }
+
+      .impact-section h2 {
+        margin-top: 0;
+        font-size: 2rem;
+        margin-bottom: 20px;
+      }
+
+      .impact-stats {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        gap: 20px;
+        margin-top: 25px;
+      }
+
+      .stat-item {
+        flex: 1;
+        min-width: 200px;
+        background: rgba(255, 255, 255, 0.15);
+        padding: 20px;
+        border-radius: 10px;
+        backdrop-filter: blur(10px);
+      }
+
+      .stat-number {
+        font-size: 2.5rem;
+        font-weight: bold;
+        display: block;
+        margin-bottom: 10px;
+      }
+
+      .stat-label {
+        font-size: 1rem;
+        opacity: 0.9;
+      }
+
+      .best-practices {
+        background: var(--info-bg, #e3f2fd);
+        padding: 30px;
+        border-radius: 15px;
+        margin-bottom: 30px;
+      }
+
+      .best-practices h2 {
+        color: var(--primary-color, #2563eb);
+        margin-top: 0;
+        margin-bottom: 20px;
+        font-size: 1.8rem;
+      }
+
+      .practice-item {
+        display: flex;
+        align-items: start;
+        gap: 15px;
+        padding: 15px;
+        margin-bottom: 15px;
+        background: var(--card-bg, white);
+        border-radius: 10px;
+        transition: transform 0.2s;
+      }
+
+      .practice-item:hover {
+        transform: translateX(10px);
+      }
+
+      .practice-number {
+        background: var(--primary-color, #2563eb);
+        color: white;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        flex-shrink: 0;
+      }
+
+      .practice-text {
+        flex: 1;
+        color: var(--text-color, #333);
+        line-height: 1.6;
+      }
+
+      .action-buttons {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        margin-top: 30px;
+        flex-wrap: wrap;
+      }
+
+      .btn-action {
+        padding: 12px 30px;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .btn-primary-action {
+        background: var(--primary-color, #2563eb);
+        color: white;
+      }
+
+      .btn-primary-action:hover {
+        background: var(--primary-hover, #1d4ed8);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+      }
+
+      .btn-secondary-action {
+        background: var(--secondary-color, #6b7280);
+        color: white;
+      }
+
+      .btn-secondary-action:hover {
+        background: var(--secondary-hover, #4b5563);
+      }
+
+      /* Tema oscuro */
+      [data-theme="dark"] .sustainability-container {
+        background: #1e293b;
+      }
+
+      [data-theme="dark"] .tip-card {
+        background: #0f172a;
+      }
+
+      [data-theme="dark"] .best-practices {
+        background: #1e293b;
+      }
+
+      [data-theme="dark"] .practice-item {
+        background: #0f172a;
+      }
+
+      [data-theme="dark"] .impact-section {
+        background: linear-gradient(135deg, #059669 0%, #047857 100%);
+      }
+
+      /* Textos en modo oscuro */
+      [data-theme="dark"] .sustainability-header h1 {
+        color: #60a5fa !important;
+      }
+
+      [data-theme="dark"] .sustainability-header p {
+        color: #cbd5e1 !important;
+      }
+
+      [data-theme="dark"] .tip-title {
+        color: #f1f5f9 !important;
+      }
+
+      [data-theme="dark"] .tip-content {
+        color: #cbd5e1 !important;
+      }
+
+      [data-theme="dark"] .tip-list li {
+        color: #cbd5e1 !important;
+      }
+
+      [data-theme="dark"] .tip-list li::before {
+        color: #60a5fa !important;
+      }
+
+      [data-theme="dark"] .best-practices h2 {
+        color: #60a5fa !important;
+      }
+
+      [data-theme="dark"] .practice-text {
+        color: #cbd5e1 !important;
+      }
+
+      [data-theme="dark"] .hero {
+        background: #0f172a !important;
+      }
+
+      @media (max-width: 768px) {
+        .sustainability-container {
+          margin: 20px;
+          padding: 20px;
+        }
+
+        .sustainability-header h1 {
+          font-size: 1.8rem;
+        }
+
+        .tips-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .impact-stats {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="hero">
+      <nav class="navbar">
+        <span class="navbar-title">BlackQuery</span>
+        <div class="navbar-actions">
+          <button
+            class="btn panel"
+            onclick="window.location.href='principal.html'"
+          >
+            🏠 Inicio
+          </button>
+          <button class="btn panel" onclick="window.location.href='panel.html'">
+            📊 Mis Proyectos
+          </button>
+          <button onclick="logout()" class="btn logout">Cerrar Sesión</button>
+        </div>
+      </nav>
+
+      <div class="sustainability-container">
+        <div class="sustainability-header">
+          <h1>
+            <span class="icon">🌱</span>
+            Uso Sostenible del Sistema
+          </h1>
+          <p>
+            Optimiza tu experiencia y contribuye a un uso más eficiente de los
+            recursos del sistema. Siguiendo estas recomendaciones, mejoramos el
+            rendimiento y reducimos el consumo energético.
+          </p>
+        </div>
+
+        <div class="impact-section">
+          <h2>🌍 Tu Impacto Importa</h2>
+          <p>Cada acción cuenta. Al seguir estas recomendaciones, ayudas a:</p>
+          <div class="impact-stats">
+            <div class="stat-item">
+              <span class="stat-number">-30%</span>
+              <span class="stat-label">Reducción de Energía</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">2x</span>
+              <span class="stat-label">Velocidad de Análisis</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">100%</span>
+              <span class="stat-label">Seguridad de Datos</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="tips-grid">
+          <div class="tip-card energy">
+            <div class="tip-header">
+              <div class="tip-icon">⚡</div>
+              <div class="tip-title">Eficiencia Energética</div>
+            </div>
+            <div class="tip-content">
+              <p>Optimiza el consumo de energía del sistema:</p>
+              <ul class="tip-list">
+                <li>Evita múltiples análisis simultáneos</li>
+                <li>Espera a que termine un análisis antes de iniciar otro</li>
+                <li>Utiliza el modo oscuro para reducir consumo de pantalla</li>
+                <li>Cierra pestañas no utilizadas</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="tip-card performance">
+            <div class="tip-header">
+              <div class="tip-icon">🚀</div>
+              <div class="tip-title">Rendimiento Óptimo</div>
+            </div>
+            <div class="tip-content">
+              <p>Mejora la velocidad de análisis:</p>
+              <ul class="tip-list">
+                <li>Comprime archivos antes de subirlos</li>
+                <li>Elimina archivos innecesarios del proyecto</li>
+                <li>Sube solo el código fuente necesario</li>
+                <li>Evita incluir dependencias o binarios</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="tip-card resources">
+            <div class="tip-header">
+              <div class="tip-icon">💾</div>
+              <div class="tip-title">Gestión de Recursos</div>
+            </div>
+            <div class="tip-content">
+              <p>Usa los recursos de manera responsable:</p>
+              <ul class="tip-list">
+                <li>Cierra sesiones cuando no las uses</li>
+                <li>Elimina proyectos antiguos innecesarios</li>
+                <li>Evita subir archivos muy grandes (>50MB)</li>
+                <li>Realiza análisis solo cuando sea necesario</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="tip-card security">
+            <div class="tip-header">
+              <div class="tip-icon">🔒</div>
+              <div class="tip-title">Seguridad y Privacidad</div>
+            </div>
+            <div class="tip-content">
+              <p>Protege tus datos y el sistema:</p>
+              <ul class="tip-list">
+                <li>Cierra sesión al terminar de usar el sistema</li>
+                <li>No compartas tus credenciales</li>
+                <li>Elimina proyectos con datos sensibles</li>
+                <li>Reporta comportamientos inusuales</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="best-practices">
+          <h2>📋 Mejores Prácticas Recomendadas</h2>
+
+          <div class="practice-item">
+            <div class="practice-number">1</div>
+            <div class="practice-text">
+              <strong>Planifica tus análisis:</strong> Agrupa múltiples cambios
+              antes de analizar, en lugar de analizar cada pequeña modificación
+              individualmente.
+            </div>
+          </div>
+
+          <div class="practice-item">
+            <div class="practice-number">2</div>
+            <div class="practice-text">
+              <strong>Optimiza tus archivos:</strong> Sube únicamente archivos
+              .java y .zip. Excluye librerías, dependencias compiladas y
+              archivos de configuración IDE.
+            </div>
+          </div>
+
+          <div class="practice-item">
+            <div class="practice-number">3</div>
+            <div class="practice-text">
+              <strong>Mantén sesiones activas cortas:</strong> Si vas a estar
+              inactivo por más de 30 minutos, cierra tu sesión para liberar
+              recursos del servidor.
+            </div>
+          </div>
+
+          <div class="practice-item">
+            <div class="practice-number">4</div>
+            <div class="practice-text">
+              <strong>Revisa antes de subir:</strong> Verifica que tu archivo
+              ZIP no contenga archivos binarios, ejecutables o contenido
+              malicioso que pueda ser rechazado.
+            </div>
+          </div>
+
+          <div class="practice-item">
+            <div class="practice-number">5</div>
+            <div class="practice-text">
+              <strong>Limpieza periódica:</strong> Elimina proyectos antiguos
+              que ya no necesites para mantener tu panel organizado y liberar
+              espacio en el sistema.
+            </div>
+          </div>
+
+          <div class="practice-item">
+            <div class="practice-number">6</div>
+            <div class="practice-text">
+              <strong>Usa horarios de menor carga:</strong> Si es posible,
+              realiza análisis extensos durante horas de menor actividad para
+              obtener resultados más rápidos.
+            </div>
+          </div>
+        </div>
+
+        <div class="action-buttons">
+          <button
+            class="btn-action btn-primary-action"
+            onclick="window.location.href='principal.html'"
+          >
+            🚀 Comenzar Análisis
+          </button>
+          <button
+            class="btn-action btn-secondary-action"
+            onclick="window.location.href='panel.html'"
+          >
+            📊 Ver Mis Proyectos
+          </button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

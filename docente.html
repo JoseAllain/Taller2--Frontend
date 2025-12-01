@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="stylesheet" href="css/dark-mode-base.css" />
     <link rel="stylesheet" href="css/dark-mode-principal.css" />
+    <link rel="stylesheet" href="css/dark-mode-admin.css" />
     <style>
       /* Global Styles with Dark Mode Support */
       body {
@@ -38,7 +39,7 @@
       }
 
       .teacher-section {
-        background: var(--card-bg, white);
+        background: white;
         border-radius: 10px;
         padding: 25px;
         margin: 20px 0;
@@ -47,8 +48,13 @@
       }
 
       body.dark-mode .teacher-section {
-        background: var(--card-bg-dark, #2c3e50);
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        background: #2c3e50 !important;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3) !important;
+      }
+
+      [data-theme="dark"] .teacher-section {
+        background: #2c3e50 !important;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3) !important;
       }
 
       .dashboard-grid {
@@ -95,7 +101,7 @@
 
       .tabs {
         display: flex;
-        background: var(--tab-bg, #f8f9fa);
+        background: #f8f9fa;
         border-radius: 8px;
         margin: 20px 0;
         overflow: hidden;
@@ -103,7 +109,11 @@
       }
 
       body.dark-mode .tabs {
-        background: var(--tab-bg-dark, #34495e);
+        background: #34495e !important;
+      }
+
+      [data-theme="dark"] .tabs {
+        background: #34495e !important;
       }
 
       .tab {
@@ -314,6 +324,91 @@
         color: #63b3ed;
       }
 
+      /* Estilos para las tarjetas de estudiantes */
+      .students-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+      }
+
+      .student-card {
+        background: var(--card-bg, white);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      body.dark-mode .student-card {
+        background: var(--card-bg-dark, #2c3e50);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+      }
+
+      .student-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      body.dark-mode .student-card:hover {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      }
+
+      .student-card h4 {
+        margin: 0;
+        color: var(--text-color, #2c3e50);
+      }
+
+      body.dark-mode .student-card h4 {
+        color: var(--text-color-dark, #e2e8f0);
+      }
+
+      .student-card p {
+        margin: 5px 0 0 0;
+        color: #666;
+        font-size: 12px;
+      }
+
+      body.dark-mode .student-card p {
+        color: #cbd5e0;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 40px;
+        background: #f8f9fa;
+        border-radius: 10px;
+      }
+
+      body.dark-mode .empty-state {
+        background: #2c3e50;
+      }
+
+      .empty-state h4 {
+        color: var(--text-color, #2c3e50);
+      }
+
+      body.dark-mode .empty-state h4 {
+        color: var(--text-color-dark, #e2e8f0);
+      }
+
+      .empty-state p {
+        color: #666;
+      }
+
+      body.dark-mode .empty-state p {
+        color: #cbd5e0;
+      }
+
+      .loading-state {
+        text-align: center;
+        padding: 40px;
+        color: #666;
+      }
+
+      body.dark-mode .loading-state {
+        color: #cbd5e0;
+      }
+
       .form-group {
         margin: 10px 0;
       }
@@ -422,6 +517,108 @@
         cursor: not-allowed;
       }
 
+      /* Animación del modal */
+      @keyframes modalSlideIn {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Estilos para el modal de proyectos del estudiante */
+      #student-projects-modal .student-info-header {
+        border-bottom: 2px solid var(--border-color, #e5e7eb);
+        padding-bottom: 20px;
+      }
+
+      body.dark-mode #student-projects-modal .student-info-header {
+        border-bottom-color: var(--border-color-dark, #374151);
+      }
+
+      #student-projects-modal .project-item {
+        transition: all 0.3s ease;
+      }
+
+      #student-projects-modal .project-item:hover {
+        transform: translateX(5px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      body.dark-mode #student-projects-modal .project-item {
+        background: var(--card-bg-dark, #374151) !important;
+      }
+
+      body.dark-mode #student-projects-modal .project-item:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      }
+
+      /* Scrollbar personalizado para la lista de proyectos */
+      #student-projects-modal .projects-list::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      #student-projects-modal .projects-list::-webkit-scrollbar-track {
+        background: var(--bg-color, #f1f1f1);
+        border-radius: 10px;
+      }
+
+      body.dark-mode
+        #student-projects-modal
+        .projects-list::-webkit-scrollbar-track {
+        background: var(--bg-color-dark, #1a1a2e);
+      }
+
+      #student-projects-modal .projects-list::-webkit-scrollbar-thumb {
+        background: #667eea;
+        border-radius: 10px;
+      }
+
+      #student-projects-modal .projects-list::-webkit-scrollbar-thumb:hover {
+        background: #764ba2;
+      }
+
+      body.dark-mode #student-projects-content {
+        background: var(--card-bg-dark, #2d3748) !important;
+        color: var(--text-color-dark, #e2e8f0) !important;
+      }
+
+      body.dark-mode #student-projects-modal h3,
+      body.dark-mode #student-projects-modal h4,
+      body.dark-mode #student-projects-modal h5 {
+        color: var(--text-color-dark, #e2e8f0) !important;
+      }
+
+      body.dark-mode #student-projects-modal p {
+        color: #cbd5e0 !important;
+      }
+
+      /* Spinner de carga */
+      .loading-spinner {
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        border: 4px solid rgba(0, 0, 0, 0.1);
+        border-radius: 50%;
+        border-top-color: #667eea;
+        animation: spin 1s ease-in-out infinite;
+        margin-bottom: 15px;
+      }
+
+      body.dark-mode .loading-spinner {
+        border-color: rgba(255, 255, 255, 0.1);
+        border-top-color: #8b5cf6;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
       .alert {
         padding: 12px;
         border-radius: 6px;
@@ -505,9 +702,6 @@
           <button class="tab" onclick="showTeacherTab('project-monitoring')">
             📊 Monitoreo de Proyectos
           </button>
-          <button class="tab" onclick="showTeacherTab('reports-analysis')">
-            📈 Análisis de Reportes
-          </button>
         </div>
 
         <!-- Contenido de Gestión de Estudiantes -->
@@ -552,17 +746,65 @@
         <!-- Contenido de Monitoreo de Proyectos -->
         <div id="project-monitoring" class="tab-content">
           <h3>📊 Monitoreo de Proyectos de Estudiantes</h3>
+
+          <div
+            style="
+              margin-bottom: 20px;
+              padding: 15px;
+              background: #e7f3ff;
+              border-radius: 8px;
+            "
+          >
+            <p style="margin: 0; color: #0066cc">
+              💡 <strong>Selecciona un estudiante</strong> para ver todos sus
+              proyectos y análisis en detalle
+            </p>
+          </div>
+
           <div id="projects-monitoring-content">
-            <!-- Se carga dinámicamente -->
+            <div
+              class="loading-state"
+              style="text-align: center; padding: 40px"
+            >
+              <p>⏳ Cargando estudiantes...</p>
+            </div>
           </div>
         </div>
+      </div>
 
-        <!-- Contenido de Análisis de Reportes -->
-        <div id="reports-analysis" class="tab-content">
-          <h3>📈 Análisis de Reportes</h3>
-          <div id="reports-analysis-content">
-            <!-- Se carga dinámicamente -->
-          </div>
+      <!-- Modal para ver proyectos del estudiante -->
+      <div
+        id="student-projects-modal"
+        style="
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.5);
+          backdrop-filter: blur(4px);
+          z-index: 1000;
+          justify-content: center;
+          align-items: center;
+        "
+        onclick="if(event.target === this) closeStudentProjectsModal()"
+      >
+        <div
+          id="student-projects-content"
+          style="
+            background: var(--card-bg, white);
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            animation: modalSlideIn 0.3s ease;
+          "
+        >
+          <!-- Contenido dinámico -->
         </div>
       </div>
 
@@ -698,9 +940,6 @@
             break;
           case "project-monitoring":
             loadProjectMonitoring();
-            break;
-          case "reports-analysis":
-            loadReportsAnalysis();
             break;
           case "class-statistics":
             loadClassStatistics();
@@ -946,11 +1185,135 @@
         }
       }
 
-      // ===== ACCIONES DE ESTUDIANTE (SIMPLIFICADAS) =====
-      function viewStudentProjects(studentEmail) {
-        alert(
-          `📂 Ver proyectos de ${studentEmail} - Funcionalidad disponible próximamente`
+      // ===== ACCIONES DE ESTUDIANTE =====
+      async function viewStudentProjects(userId, studentName) {
+        try {
+          // Mostrar modal de carga
+          showStudentProjectsModal(userId, studentName, true);
+
+          // Obtener proyectos del estudiante
+          const studentData = await apiService.getUserProjectsById(userId);
+
+          // Mostrar modal con datos
+          showStudentProjectsModal(userId, studentName, false, studentData);
+        } catch (error) {
+          console.error("Error al cargar proyectos del estudiante:", error);
+          alert(
+            "❌ Error al cargar información del estudiante: " + error.message
+          );
+        }
+      }
+
+      function showStudentProjectsModal(
+        userId,
+        studentName,
+        isLoading = false,
+        studentData = null
+      ) {
+        const modal = document.getElementById("student-projects-modal");
+        const modalContent = document.getElementById(
+          "student-projects-content"
         );
+
+        modal.style.display = "flex";
+
+        if (isLoading) {
+          modalContent.innerHTML = `
+            <div class="loading-state" style="text-align: center; padding: 40px;">
+              <div class="loading-spinner"></div>
+              <p>⏳ Cargando información del estudiante...</p>
+            </div>
+          `;
+          return;
+        }
+
+        if (!studentData || !studentData.projects) {
+          modalContent.innerHTML = `
+            <div class="empty-state">
+              <h4>❌ Error al cargar datos</h4>
+              <p>No se pudo obtener la información del estudiante</p>
+            </div>
+          `;
+          return;
+        }
+
+        const projects = studentData.projects || [];
+
+        modalContent.innerHTML = `
+          <div class="student-info-header">
+            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+              <div style="width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 30px;">
+                👨‍🎓
+              </div>
+              <div>
+                <h3 style="margin: 0; color: var(--text-color, #2c3e50);">${
+                  studentData.user_full_name || studentData.user_email
+                }</h3>
+                <p style="margin: 5px 0 0 0; color: #666; font-size: 14px;">📧 ${
+                  studentData.user_email
+                }</p>
+                <p style="margin: 5px 0 0 0; color: #666; font-size: 14px;">📂 ${
+                  projects.length
+                } proyecto(s)</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="projects-section" style="margin-top: 20px;">
+            <h4 style="color: var(--text-color, #2c3e50); margin-bottom: 15px;">📊 Proyectos</h4>
+            ${
+              projects.length === 0
+                ? `
+              <div class="empty-state">
+                <p>📂 Este estudiante no tiene proyectos registrados</p>
+              </div>
+            `
+                : `
+              <div class="projects-list" style="max-height: 400px; overflow-y: auto;">
+                ${projects
+                  .map(
+                    (p) => `
+                  <div class="project-item" style="background: var(--card-bg, #f8f9fa); padding: 15px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid #667eea;">
+                    <h5 style="margin: 0 0 8px 0; color: var(--text-color, #2c3e50);">📁 ${
+                      p.name
+                    }</h5>
+                    <p style="margin: 5px 0; color: #666; font-size: 13px;">📅 ${new Date(
+                      p.created_at
+                    ).toLocaleDateString("es-ES", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}</p>
+                    <p style="margin: 5px 0; color: #666; font-size: 13px;">📝 ${
+                      p.description || "Sin descripción"
+                    }</p>
+                    <div style="margin-top: 10px; display: flex; gap: 10px;">
+                      <button class="btn-teacher" onclick="window.location.href='reporte-docente.html?id=${
+                        p.id
+                      }'" style="flex: 1; padding: 8px;">
+                        📊 Ver Reporte
+                      </button>
+                    </div>
+                  </div>
+                `
+                  )
+                  .join("")}
+              </div>
+            `
+            }
+          </div>
+          
+          <div class="modal-actions" style="margin-top: 20px; display: flex; gap: 10px; justify-content: center; padding-top: 20px; border-top: 1px solid var(--border-color, #ddd);">
+            <button class="btn-teacher" onclick="closeStudentProjectsModal()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 12px 30px;">
+              ✖️ Cerrar
+            </button>
+          </div>
+        `;
+      }
+
+      function closeStudentProjectsModal() {
+        const modal = document.getElementById("student-projects-modal");
+        modal.style.display = "none";
       }
 
       function viewStudentReports(studentEmail) {
@@ -959,39 +1322,95 @@
         );
       }
 
-      // ===== OTRAS PESTAÑAS (SIMULADAS) =====
-      function loadProjectMonitoring() {
+      // ===== OTRAS PESTAÑAS =====
+      async function loadProjectMonitoring() {
         const container = document.getElementById(
           "projects-monitoring-content"
         );
-        container.innerHTML = `
-              <div class="alert-item">
-                  <p>Esta sección permite monitorear todos los proyectos subidos por los estudiantes en tiempo real.</p>
-                  <ul>
-                      <li>📈 Estado de análisis en progreso</li>
-                      <li>📊 Resultados de vulnerabilidades detectadas</li>
-                      <li>⏱️ Tiempo de procesamiento</li>
-                      <li>📋 Historial de análisis</li>
-                  </ul>
-                  <button class="btn-teacher">🔄 Actualizar Estado</button>
-              </div>
-          `;
-      }
 
-      function loadReportsAnalysis() {
-        const container = document.getElementById("reports-analysis-content");
-        container.innerHTML = `
-              <div class="alert-item">
-                  <p>Análisis consolidado de todos los reportes de estudiantes.</p>
-                  <ul>
-                      <li>📊 Estadísticas de vulnerabilidades más comunes</li>
-                      <li>📈 Tendencias de mejora por estudiante</li>
-                      <li>🎯 Áreas que requieren mayor atención</li>
-                      <li>📋 Comparativas entre proyectos</li>
-                  </ul>
-                  <button class="btn-teacher">📊 Generar Reporte</button>
-              </div>
+        try {
+          container.innerHTML = `
+            <div class="loading-state" style="text-align: center; padding: 40px;">
+              <p>⏳ Cargando estudiantes...</p>
+            </div>
           `;
+
+          // Obtener lista de estudiantes usando el nuevo endpoint para docentes
+          const response = await apiService.getTeacherStudents();
+          const students = response.users || [];
+
+          if (students.length === 0) {
+            container.innerHTML = `
+              <div class="empty-state" style="text-align: center; padding: 40px; background: #f8f9fa; border-radius: 10px;">
+                <h4>👨‍🎓 No hay estudiantes registrados</h4>
+                <p>Aún no tienes estudiantes que monitorear</p>
+                <button class="btn-teacher" onclick="showTab('students'); showCreateStudentModal()">
+                  ➕ Crear Primer Estudiante
+                </button>
+              </div>
+            `;
+            return;
+          }
+
+          // Mostrar lista de estudiantes con opción para ver sus proyectos
+          container.innerHTML = `
+            <div class="students-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
+              ${students
+                .map(
+                  (student) => `
+                <div class="student-card" style="background: var(--card-bg, white); padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); transition: transform 0.3s ease;">
+                  <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                    <div style="width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; margin-right: 15px;">
+                      👨‍🎓
+                    </div>
+                    <div>
+                      <h4 style="margin: 0; color: var(--text-color, #2c3e50);">${
+                        student.nombre_completo || student.correo
+                      }</h4>
+                      <p style="margin: 5px 0 0 0; color: #666; font-size: 12px;">${
+                        student.correo
+                      }</p>
+                    </div>
+                  </div>
+                  <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #e0e0e0;">
+                    <button 
+                      class="btn-teacher" 
+                      onclick="viewStudentProjects(${student.id}, '${
+                    student.nombre_completo || student.correo
+                  }')"
+                      style="width: 100%; padding: 10px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.3s ease;"
+                    >
+                      📊 Ver Proyectos
+                    </button>
+                  </div>
+                </div>
+              `
+                )
+                .join("")}
+            </div>
+          `;
+
+          // Agregar hover effect
+          document.querySelectorAll(".student-card").forEach((card) => {
+            card.addEventListener("mouseenter", () => {
+              card.style.transform = "translateY(-5px)";
+              card.style.boxShadow = "0 4px 20px rgba(0,0,0,0.15)";
+            });
+            card.addEventListener("mouseleave", () => {
+              card.style.transform = "translateY(0)";
+              card.style.boxShadow = "0 2px 10px rgba(0,0,0,0.1)";
+            });
+          });
+        } catch (error) {
+          console.error("Error cargando estudiantes:", error);
+          container.innerHTML = `
+            <div class="alert-item" style="background: #fee; color: #c00; padding: 20px; border-radius: 8px;">
+              <h4>❌ Error al cargar estudiantes</h4>
+              <p>${error.message}</p>
+              <button class="btn-teacher" onclick="loadProjectMonitoring()">🔄 Reintentar</button>
+            </div>
+          `;
+        }
       }
 
       // ===== FUNCIONES ADICIONALES =====

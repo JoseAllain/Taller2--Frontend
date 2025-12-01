@@ -8,10 +8,28 @@ if (!token) {
 
 // Solo en reporte.html se necesita validar proyecto_id
 if (location.pathname.endsWith("reporte.html")) {
-  const proyectoId = localStorage.getItem("proyecto_id");
-  if (!proyectoId) {
+  // Verificar si hay ID en la URL o en localStorage
+  const urlParams = new URLSearchParams(window.location.search);
+  const proyectoIdFromUrl = urlParams.get('id');
+  const proyectoIdFromStorage = localStorage.getItem("proyecto_id");
+  
+  // Si hay ID en la URL o en localStorage, está bien
+  if (!proyectoIdFromUrl && !proyectoIdFromStorage) {
     alert("Debes subir un proyecto antes de ver el reporte.");
-    window.location.href = "principal.html";
+    
+    // Redirigir según el rol del usuario
+    apiService.getCurrentUser()
+      .then(user => {
+        if (user.rol === 'docente') {
+          window.location.href = "docente.html";
+        } else {
+          window.location.href = "principal.html";
+        }
+      })
+      .catch(() => {
+        // Si falla, redirigir a principal por defecto
+        window.location.href = "principal.html";
+      });
   }
 }
 

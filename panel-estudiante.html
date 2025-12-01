@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Proyectos del Estudiante - BlackQuery</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/panel_css.css" />
+    <link rel="stylesheet" href="css/dark-mode-base.css" />
+    <link rel="stylesheet" href="css/dark-mode-panel.css" />
+    <script defer src="js/api-service.js"></script>
+    <script defer src="js/dark-mode.js"></script>
+  </head>
+  <body>
+    <nav class="navbar">
+      <span class="navbar-title">BlackQuery</span>
+      <div class="navbar-actions">
+        <button onclick="window.location.href='docente.html'" class="btn panel">
+          ⬅️ Volver al Panel Docente
+        </button>
+        <button onclick="logout()" class="btn logout">Cerrar Sesión</button>
+      </div>
+    </nav>
+    <div class="panel-container">
+      <!-- Información del estudiante -->
+      <div id="student-info" class="user-section">
+        <div class="user-card">
+          <h2>👨‍🎓 Proyectos del Estudiante</h2>
+          <p id="student-name">Cargando información...</p>
+          <p id="student-email"></p>
+        </div>
+      </div>
+
+      <h1 id="projects-title">Proyectos Analizados</h1>
+      <ul id="lista-proyectos" class="project-list">
+        <div class="loading-state">
+          <p>⏳ Cargando proyectos del estudiante...</p>
+        </div>
+      </ul>
+    </div>
+
+    <!-- Estilos adicionales -->
+    <style>
+      .user-section {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+      }
+
+      body.dark-mode .user-section {
+        background: #2c3e50;
+      }
+
+      .user-card h2 {
+        color: #333;
+        margin: 0 0 10px 0;
+      }
+
+      body.dark-mode .user-card h2 {
+        color: #e2e8f0;
+      }
+
+      .user-card p {
+        color: #666;
+        margin: 5px 0;
+      }
+
+      body.dark-mode .user-card p {
+        color: #cbd5e0;
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: bold;
+        margin-left: 10px;
+      }
+
+      .badge.student {
+        background: #007bff;
+        color: white;
+      }
+
+      .project-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+        flex-wrap: wrap;
+      }
+
+      .btn-metrics,
+      .btn-analyze {
+        background: #6c757d;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 13px;
+        transition: all 0.3s ease;
+      }
+
+      .btn-metrics:hover {
+        background: #5a6268;
+        transform: translateY(-2px);
+      }
+
+      .btn-analyze {
+        background: #17a2b8;
+      }
+
+      .btn-analyze:hover {
+        background: #138496;
+        transform: translateY(-2px);
+      }
+
+      .loading-state {
+        text-align: center;
+        padding: 40px;
+        color: #666;
+      }
+
+      body.dark-mode .loading-state {
+        color: #cbd5e0;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        background: #f8f9fa;
+        border-radius: 10px;
+        margin: 20px 0;
+      }
+
+      body.dark-mode .empty-state {
+        background: #2c3e50;
+      }
+
+      .empty-state h3 {
+        color: #333;
+        margin-bottom: 15px;
+      }
+
+      body.dark-mode .empty-state h3 {
+        color: #e2e8f0;
+      }
+
+      .empty-state p {
+        color: #666;
+        margin-bottom: 20px;
+      }
+
+      body.dark-mode .empty-state p {
+        color: #cbd5e0;
+      }
+
+      .loading-more {
+        text-align: center;
+        padding: 20px;
+        color: #666;
+      }
+
+      body.dark-mode .loading-more {
+        color: #cbd5e0;
+      }
+
+      .loading-spinner {
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+        border: 3px solid rgba(0, 0, 0, 0.1);
+        border-radius: 50%;
+        border-top-color: #667eea;
+        animation: spin 1s ease-in-out infinite;
+      }
+
+      body.dark-mode .loading-spinner {
+        border-color: rgba(255, 255, 255, 0.1);
+        border-top-color: #64b5f6;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+
+    <script src="js/autenticacion.js"></script>
+    <script>
+      const token = localStorage.getItem("token");
+      if (!token) {
+        alert("Debes iniciar sesión");
+        window.location.href = "index.html";
+      }
+
+      // Variables para lazy loading
+      let todosLosProyectos = [];
+      let proyectosCargados = 0;
+      const PROYECTOS_POR_PAGINA = 5;
+      let cargandoMasProyectos = false;
+      let studentData = null;
+
+      window.onload = async () => {
+        try {
+          // Obtener el ID del estudiante de la URL
+          const urlParams = new URLSearchParams(window.location.search);
+          const userId = urlParams.get("userId");
+
+          if (!userId) {
+            alert("❌ No se especificó un estudiante");
+            window.location.href = "docente.html";
+            return;
+          }
+
+          // Obtener proyectos del estudiante
+          studentData = await apiService.getUserProjectsById(userId);
+          todosLosProyectos = studentData.projects;
+
+          // Mostrar información del estudiante
+          document.getElementById(
+            "student-name"
+          ).innerHTML = `<strong>👤 Estudiante:</strong> ${
+            studentData.user_full_name || studentData.user_email
+          }`;
+          document.getElementById(
+            "student-email"
+          ).innerHTML = `<strong>📧 Email:</strong> ${studentData.user_email}`;
+          document.getElementById(
+            "projects-title"
+          ).textContent = `Proyectos de ${
+            studentData.user_full_name || studentData.user_email
+          } (${todosLosProyectos.length})`;
+
+          const contenedor = document.getElementById("lista-proyectos");
+          contenedor.innerHTML = "";
+
+          if (todosLosProyectos.length === 0) {
+            contenedor.innerHTML = `
+              <div class="empty-state">
+                <h3>📂 Este estudiante no tiene proyectos registrados</h3>
+                <p>El estudiante aún no ha subido ningún proyecto para análisis</p>
+              </div>
+            `;
+            return;
+          }
+
+          // Cargar proyectos con lazy loading
+          cargarMasProyectos();
+          configurarScrollInfinito();
+        } catch (error) {
+          console.error("Error al cargar proyectos del estudiante:", error);
+          if (error.message === "Sesión expirada") {
+            return;
+          }
+          alert("Error al cargar información: " + error.message);
+          window.location.href = "docente.html";
+        }
+      };
+
+      // ===== LAZY LOADING =====
+      function cargarMasProyectos() {
+        if (cargandoMasProyectos) return;
+
+        cargandoMasProyectos = true;
+        const contenedor = document.getElementById("lista-proyectos");
+
+        const inicio = proyectosCargados;
+        const fin = Math.min(
+          proyectosCargados + PROYECTOS_POR_PAGINA,
+          todosLosProyectos.length
+        );
+
+        console.log(
+          `🔄 Cargando proyectos ${inicio + 1} a ${fin} de ${
+            todosLosProyectos.length
+          }`
+        );
+
+        for (let i = inicio; i < fin; i++) {
+          const p = todosLosProyectos[i];
+          const item = document.createElement("li");
+          item.className = "project-card";
+          item.style.opacity = "0";
+          item.style.transform = "translateY(20px)";
+          item.style.transition = "opacity 0.3s ease, transform 0.3s ease";
+
+          item.innerHTML = `
+            <div class="project-info">
+              <h3>📁 ${p.name}</h3>
+              <p>📅 Creado: ${new Date(p.created_at).toLocaleDateString(
+                "es-ES"
+              )}</p>
+              <p>📝 ${p.description || "Sin descripción"}</p>
+            </div>
+            <div class="project-actions">
+              <button class="btn-ver" onclick="verProyecto(${
+                p.id
+              })">📊 Ver Reporte</button>
+              <button class="btn-metrics" onclick="verMetricas(${
+                p.id
+              })">📈 Métricas</button>
+            </div>
+          `;
+
+          contenedor.appendChild(item);
+
+          setTimeout(() => {
+            item.style.opacity = "1";
+            item.style.transform = "translateY(0)";
+          }, (i - inicio) * 50);
+        }
+
+        proyectosCargados = fin;
+
+        let loadingIndicator = document.getElementById("loading-more");
+
+        if (proyectosCargados < todosLosProyectos.length) {
+          if (!loadingIndicator) {
+            loadingIndicator = document.createElement("div");
+            loadingIndicator.id = "loading-more";
+            loadingIndicator.className = "loading-more";
+            loadingIndicator.innerHTML = `
+              <div class="loading-spinner"></div>
+              <p>Cargando más proyectos...</p>
+            `;
+            contenedor.appendChild(loadingIndicator);
+          }
+        } else {
+          if (loadingIndicator) {
+            loadingIndicator.remove();
+          }
+          console.log("✅ Todos los proyectos han sido cargados");
+        }
+
+        cargandoMasProyectos = false;
+      }
+
+      function configurarScrollInfinito() {
+        const contenedor = document.getElementById("lista-proyectos");
+
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (
+                entry.isIntersecting &&
+                proyectosCargados < todosLosProyectos.length
+              ) {
+                console.log(
+                  "📜 Usuario llegó al final, cargando más proyectos..."
+                );
+                cargarMasProyectos();
+              }
+            });
+          },
+          {
+            root: null,
+            rootMargin: "100px",
+            threshold: 0.1,
+          }
+        );
+
+        const checkForIndicator = () => {
+          const loadingIndicator = document.getElementById("loading-more");
+          if (loadingIndicator) {
+            observer.observe(loadingIndicator);
+          }
+        };
+
+        setTimeout(checkForIndicator, 100);
+      }
+
+      // ===== FUNCIONES DE NAVEGACIÓN =====
+      function verProyecto(projectId) {
+        window.location.href = `reporte.html?id=${projectId}`;
+      }
+
+      function verMetricas(projectId) {
+        window.location.href = `reporte.html?id=${projectId}#metricas`;
+      }
+
+      function logout() {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user_info");
+        window.location.href = "index.html";
+      }
+    </script>
+  </body>
+</html>
