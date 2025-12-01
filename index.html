@@ -207,7 +207,18 @@
             window.location.href = "principal.html";
           }
         } catch (error) {
-          alert("❌ Error al iniciar sesión: " + error.message);
+          // Mostrar mensaje más amigable para errores de autenticación
+          const errorMessage = error.message.toLowerCase();
+          if (
+            errorMessage.includes("incorrect") ||
+            errorMessage.includes("invalid") ||
+            errorMessage.includes("not found") ||
+            errorMessage.includes("cannot read properties")
+          ) {
+            alert("❌ Correo o contraseña incorrecta");
+          } else {
+            alert("❌ Error al iniciar sesión: " + error.message);
+          }
         }
       };
     </script>
