@@ -1,7 +1,7 @@
 // Módulo de retroalimentación rápida
 class FeedbackModule {
   constructor() {
-    this.apiBaseUrl = 'http://localhost:8000/api/v1'; // Ajustar según tu configuración
+    this.apiBaseUrl = 'https://sqli-ecologico-backend.onrender.com/api/v1'; // Ajustar según tu configuración
     this.currentProjectId = null;
     this.feedbackShown = false;
   }

@@ -4,7 +4,7 @@
  */
 class ApiService {
     constructor() {
-        this.baseURL = "http://localhost:8000/api/v1";
+        this.baseURL = "https://sqli-ecologico-backend.onrender.com/api/v1";
         this.updateToken();
     }
 
@@ -473,12 +473,12 @@ class ApiService {
 
     // ===== SALUD DEL SISTEMA =====
     async getHealthStatus() {
-        const response = await fetch("http://localhost:8000/health");
+        const response = await fetch("https://sqli-ecologico-backend.onrender.com/health");
         return this.handleResponse(response);
     }
 
     async getDetailedHealthStatus() {
-        const response = await fetch("http://localhost:8000/health/detailed");
+        const response = await fetch("https://sqli-ecologico-backend.onrender.com/health/detailed");
         return this.handleResponse(response);
     }
 

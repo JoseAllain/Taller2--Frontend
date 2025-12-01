@@ -38,7 +38,7 @@ window.onload = async () => {
   try {
     // Verificar conectividad del backend primero
     console.log("🔍 Verificando conectividad del backend...");
-    const healthCheck = await fetch("http://localhost:8000/health");
+    const healthCheck = await fetch("https://sqli-ecologico-backend.onrender.com/health");
     if (!healthCheck.ok) {
       throw new Error("El backend no está respondiendo. Verifica que esté ejecutándose.");
     }
